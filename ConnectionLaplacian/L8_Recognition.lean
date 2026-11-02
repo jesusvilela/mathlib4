@@ -29,7 +29,7 @@ bridge lemma.
 import ConnectionLaplacian.L5_Cover
 import ConnectionLaplacian.L6_Cohomology
 import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.FiniteDimensional
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 
 namespace ConnectionLaplacian
 
