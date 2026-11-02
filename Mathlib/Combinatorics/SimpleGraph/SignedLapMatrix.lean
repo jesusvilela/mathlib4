@@ -41,37 +41,39 @@ def signedLapMatrix (wrap : G.EdgeLabeling Bool) : Matrix V V ℝ :=
   G.degMatrix ℝ - G.signedAdjMatrix wrap
 
 @[simp]
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_apply (wrap : G.EdgeLabeling Bool) (u v : V) :
     G.signedAdjMatrix wrap u v =
       if h : G.Adj u v then if wrap.get u v h then -1 else 1 else 0 := rfl
 
 /-- On an edge, the signed adjacency entry is `-1` or `1` according to its label. -/
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_apply_of_adj (wrap : G.EdgeLabeling Bool) (u v : V)
     (h : G.Adj u v) :
     G.signedAdjMatrix wrap u v = if wrap.get u v h then -1 else 1 := by
   simp [signedAdjMatrix_apply, h]
 
 @[simp]
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedAdjMatrix wrap v v = 0 := by
-  have h : ¬ G.Adj v v := G.irrefl
-  simp [signedAdjMatrix_apply, h]
+  simp [signedAdjMatrix_apply]
 
 /-- The diagonal of the signed graph Laplacian is the vertex degree. -/
 @[simp]
 theorem signedLapMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedLapMatrix wrap v v = (G.degree v : ℝ) := by
-  have h : ¬ G.Adj v v := G.irrefl
-  simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply, h]
+  simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply]
 
 /-- Signed adjacency matrices are symmetric because the labels belong to unoriented edges. -/
+omit [Fintype V] [DecidableEq V] in
 theorem isSymm_signedAdjMatrix (wrap : G.EdgeLabeling Bool) :
     (G.signedAdjMatrix wrap).IsSymm := by
   apply Matrix.IsSymm.ext
   intro u v
   by_cases h : G.Adj u v
   · have h' : G.Adj v u := h.symm
-    simp only [signedAdjMatrix_apply, dif_pos h, dif_pos h']
+    simp only [signedAdjMatrix_apply, dite_eq_left h, dite_eq_left h']
     rw [wrap.get_comm u v h']
   · have h' : ¬ G.Adj v u := fun hv => h hv.symm
     simp [signedAdjMatrix_apply, h, h']
@@ -89,6 +91,7 @@ theorem isHermitian_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
 
 /-- When every edge has positive sign, the signed adjacency matrix is ordinary adjacency. -/
 @[simp]
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_const_false :
     G.signedAdjMatrix (fun _ => false) = G.adjMatrix ℝ := by
   ext u v
@@ -107,6 +110,7 @@ theorem signedLapMatrix_const_false :
 /-- If all edges are negative, the signed adjacency matrix is the negative of ordinary
 adjacency. -/
 @[simp]
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_const_true :
     G.signedAdjMatrix (fun _ => true) = -(G.adjMatrix ℝ) := by
   ext u v
@@ -168,6 +172,7 @@ theorem posSemidef_signedLapMatrix_const_true :
 /-! ### Arbitrary edge signings -/
 
 /-- Every signed adjacency entry on an edge has square one. -/
+omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_sq_apply_of_adj (wrap : G.EdgeLabeling Bool)
     {i j : V} (h : G.Adj i j) :
     (G.signedAdjMatrix wrap i j) * (G.signedAdjMatrix wrap i j) = 1 := by
@@ -206,10 +211,8 @@ private theorem signedLapMatrix_quadForm_raw (wrap : G.EdgeLabeling Bool) (x : V
   apply Finset.sum_congr rfl
   intro j _
   by_cases h : G.Adj i j
-  · simp only [if_pos h]
-  · have hzero : G.signedAdjMatrix wrap i j = 0 := by
-      simp [signedAdjMatrix_apply, h]
-    simp [h, hzero]
+  · simp only [ite_eq_left h]
+  · simp [h]
 
 /-- The energy of a signed Laplacian is a sum of squared edge differences.
 
@@ -243,7 +246,7 @@ theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
     intro j _
     by_cases h : G.Adj i j
     · have h' : G.Adj j i := h.symm
-      rw [if_pos h', if_pos h, hA_symm j i]
+      rw [ite_eq_left h', ite_eq_left h, hA_symm j i]
       ring
     · have h' : ¬ G.Adj j i := fun hj => h hj.symm
       simp [h, h']
@@ -265,7 +268,7 @@ theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
         apply Finset.sum_congr rfl
         intro j _
         by_cases h : G.Adj i j
-        · simp only [if_pos h]
+        · simp only [ite_eq_left h]
           have hsquare : (A i j * x j) * (A i j * x j) = x j * x j := by
             calc
               _ = (A i j * A i j) * (x j * x j) := by ring
@@ -313,7 +316,7 @@ theorem signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
     if G.Adj i j then (x i - G.signedAdjMatrix wrap i j * x j) ^ 2 else 0
   have he (i j : V) : 0 ≤ e i j := by
     by_cases hij : G.Adj i j
-    · simpa only [e, if_pos hij] using
+    · simpa only [e, ite_eq_left hij] using
         (sq_nonneg (x i - G.signedAdjMatrix wrap i j * x j))
     · simp [e, hij]
   have hrow (i : V) : 0 ≤ ∑ j : V, e i j :=
@@ -331,7 +334,7 @@ theorem signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
     have hij' : e i j = 0 :=
       (Finset.sum_eq_zero_iff_of_nonneg (fun k _ => he i k)).mp hi j (Finset.mem_univ j)
     have hs : (x i - G.signedAdjMatrix wrap i j * x j) ^ 2 = 0 := by
-      simpa only [e, if_pos hij] using hij'
+      simpa only [e, ite_eq_left hij] using hij'
     exact sub_eq_zero.mp (eq_zero_of_pow_eq_zero hs)
   · intro h
     apply (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hrow i)).mpr
