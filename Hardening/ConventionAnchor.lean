@@ -33,11 +33,13 @@ def G3 : ConnGraph where
   graph :=
     { Adj := adj3
       symm := by
+        constructor
         intro u v h
         simp only [adj3, edge3s, Finset.mem_insert, Finset.mem_singleton,
                    Prod.mk.injEq] at h ⊢
         omega
       loopless := by
+        constructor
         intro u
         simp only [adj3, edge3s, Finset.mem_insert, Finset.mem_singleton,
                    Prod.mk.injEq]
@@ -64,7 +66,8 @@ example :
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G3, adj3, edge3s, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset_eq_filter, Matrix.sub_apply,
+          Matrix.diagonal, Matrix.of_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
@@ -76,15 +79,15 @@ pins every convention of the flattened connection Laplacian; the full
 6x6 flatten is additionally verified entrywise by the independent
 implementation in findings/round8 on every battery instance. -/
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(0, 1) : Sym2 (Fin 3)), by simp [G3, adj3, edge3s]⟩) i j = σx i j := by
+    (G3.edgeMatrix true ⟨(s(0, 1) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = σx i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, σx]
 
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(0, 2) : Sym2 (Fin 3)), by simp [G3, adj3, edge3s]⟩) i j = I₂ i j := by
+    (G3.edgeMatrix true ⟨(s(0, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = I₂ i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, I₂]
 
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(1, 2) : Sym2 (Fin 3)), by simp [G3, adj3, edge3s]⟩) i j = I₂ i j := by
+    (G3.edgeMatrix true ⟨(s(1, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = I₂ i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, I₂]
 
 example (u : Fin 3) (i j : Fin 2) :
