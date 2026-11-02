@@ -23,10 +23,10 @@ The scalar graph Laplacian's kernel dimension is closed via Mathlib's
 
 import ConnectionLaplacian.Basic
 import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.FiniteDimensional
-import Mathlib.Combinatorics.SimpleGraph.Path
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.Combinatorics.SimpleGraph.Paths
 import Mathlib.Combinatorics.SimpleGraph.LapMatrix
-import Mathlib.Data.Matrix.Kronecker
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 namespace ConnectionLaplacian
 
