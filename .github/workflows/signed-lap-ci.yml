@@ -17,6 +17,10 @@ jobs:
   signed-laplacian:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    # Empty explicitly unsets lean-action's legacy flat URL: let current Mathlib
+    # resolve the public 'master' then 'forks' cache containers by file hash.
+    env:
+      MATHLIB_CACHE_GET_URL: ''
     steps:
       - uses: actions/checkout@v4
       - name: Install Lean, fetch Mathlib cache, and compile the signed Laplacian
@@ -28,4 +32,4 @@ jobs:
           test: false
           lint: false
           use-mathlib-cache: true
-          use-github-cache: false
+          use-github-cache: true
