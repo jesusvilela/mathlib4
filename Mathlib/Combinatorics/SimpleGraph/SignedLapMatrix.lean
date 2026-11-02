@@ -150,4 +150,127 @@ theorem posSemidef_signedLapMatrix_const_true :
   rw [G.signedLapMatrix_const_true]
   exact G.posSemidef_signlessLapMatrix
 
+
+/-! ### Arbitrary edge signings -/
+
+/-- Every signed adjacency entry on an edge has square one. -/
+theorem signedAdjMatrix_sq_apply_of_adj (wrap : G.EdgeLabeling Bool)
+    {i j : V} (h : G.Adj i j) :
+    (G.signedAdjMatrix wrap i j) * (G.signedAdjMatrix wrap i j) = 1 := by
+  rw [G.signedAdjMatrix_apply_of_adj wrap i j h]
+  split_ifs <;> norm_num
+
+/-- Expand the energy of a signed Laplacian into its diagonal and off-diagonal parts. -/
+private theorem signedLapMatrix_quadForm_raw (wrap : G.EdgeLabeling Bool) (x : V → ℝ) :
+    toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x =
+      ∑ i : V, ∑ j : V,
+        if G.Adj i j then x i * x i -
+          x i * (G.signedAdjMatrix wrap i j * x j) else 0 := by
+  have hAdj :
+      x ⬝ᵥ (G.signedAdjMatrix wrap *ᵥ x) =
+        ∑ i : V, ∑ j : V,
+          x i * (G.signedAdjMatrix wrap i j * x j) := by
+    simp only [Matrix.dotProduct, Matrix.mulVec]
+    simp_rw [Finset.mul_sum]
+  have hDegree (i : V) :
+      (G.degree i : ℝ) * x i * x i =
+        ∑ j : V, if G.Adj i j then x i * x i else 0 := by
+    rw [G.degree_eq_sum_if_adj (R := ℝ) i, Finset.sum_mul, Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro j _
+    by_cases h : G.Adj i j <;> simp [h]
+  have hDeg :
+      (∑ i : V, (G.degree i : ℝ) * x i * x i) =
+        ∑ i : V, ∑ j : V, if G.Adj i j then x i * x i else 0 :=
+    Finset.sum_congr rfl (fun i _ => hDegree i)
+  rw [toLinearMap₂'_apply', signedLapMatrix, sub_mulVec, dotProduct_sub,
+    dotProduct_mulVec_degMatrix, hAdj, hDeg]
+  rw [← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro j _
+  by_cases h : G.Adj i j
+  · simp only [if_pos h]
+  · have hzero : G.signedAdjMatrix wrap i j = 0 := by
+      simp [signedAdjMatrix_apply, h]
+    simp [h, hzero]
+
+/-- The energy of a signed Laplacian is a sum of squared edge differences.
+
+The sum is over *ordered* adjacent vertex pairs, so every undirected
+edge occurs twice and the formula includes the factor \`1 / 2\`.
+For a negatively signed edge, the corresponding square is
+\`(x i + x j) ^ 2\`; for a positively signed edge it is
+\`(x i - x j) ^ 2\`. -/
+theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
+    (x : V → ℝ) :
+    toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x =
+      (∑ i : V, ∑ j : V,
+        if G.Adj i j then
+          (x i - G.signedAdjMatrix wrap i j * x j) ^ 2 else 0) / 2 := by
+  rw [G.signedLapMatrix_quadForm_raw wrap x]
+  let A : Matrix V V ℝ := G.signedAdjMatrix wrap
+  let S : ℝ := ∑ i : V, ∑ j : V,
+    if G.Adj i j then x i * x i - x i * (A i j * x j) else 0
+  have hA_symm (i j : V) : A i j = A j i :=
+    (G.isSymm_signedAdjMatrix wrap).apply i j
+  have hA_sq (i j : V) (h : G.Adj i j) :
+      (A i j) * (A i j) = 1 :=
+    G.signedAdjMatrix_sq_apply_of_adj wrap h
+  have hswap : S = ∑ i : V, ∑ j : V,
+      if G.Adj i j then x j * x j - x i * (A i j * x j) else 0 := by
+    dsimp only [S]
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro i _
+    apply Finset.sum_congr rfl
+    intro j _
+    by_cases h : G.Adj i j
+    · have h' : G.Adj j i := h.symm
+      rw [if_pos h', if_pos h, ← hA_symm i j]
+      ring
+    · have h' : ¬ G.Adj j i := fun hj => h hj.symm
+      simp [h, h']
+  have hsum : 2 * S =
+      ∑ i : V, ∑ j : V,
+        if G.Adj i j then (x i - A i j * x j) ^ 2 else 0 := by
+    calc
+      2 * S = S + S := by ring
+      _ = S + (∑ i : V, ∑ j : V,
+          if G.Adj i j then x j * x j - x i * (A i j * x j) else 0) := by
+            rw [← hswap]
+      _ = ∑ i : V, ∑ j : V,
+          if G.Adj i j then (x i - A i j * x j) ^ 2 else 0 := by
+        dsimp only [S]
+        rw [← Finset.sum_add_distrib]
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [← Finset.sum_add_distrib]
+        apply Finset.sum_congr rfl
+        intro j _
+        by_cases h : G.Adj i j
+        · simp only [if_pos h]
+          have hsquare : (A i j * x j) * (A i j * x j) = x j * x j := by
+            calc
+              _ = (A i j * A i j) * (x j * x j) := by ring
+              _ = x j * x j := by rw [hA_sq i j h, one_mul]
+          calc
+            _ = x i * x i + x j * x j - 2 * (x i * A i j * x j) := by ring
+            _ = x i * x i + (A i j * x j) * (A i j * x j) -
+                2 * (x i * A i j * x j) := by rw [hsquare]
+            _ = (x i - A i j * x j) ^ 2 := by ring
+        · simp [h]
+  change S = (∑ i : V, ∑ j : V,
+    if G.Adj i j then (x i - A i j * x j) ^ 2 else 0) / 2
+  linarith [hsum]
+
+/-- Every real signed graph Laplacian is positive semidefinite. -/
+theorem posSemidef_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
+    (G.signedLapMatrix wrap).PosSemidef := by
+  refine .of_dotProduct_mulVec_nonneg (G.isHermitian_signedLapMatrix wrap) (fun x ↦ ?_)
+  rw [star_trivial, ← toLinearMap₂'_apply', G.signedLapMatrix_toLinearMap₂' wrap x]
+  positivity
+
 end SimpleGraph
