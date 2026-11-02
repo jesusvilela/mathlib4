@@ -1,7 +1,7 @@
 # Connection Laplacian — full Lean migration lane
 
 This branch is an **experimental full-port workspace**, separate from the
-small [upstream-ready signed-Laplacian patch](https://github.com/jesusvilela/mathlib4/tree/submission/signed-graph-laplacian).
+small [verified first signed-Laplacian PR candidate](https://github.com/jesusvilela/mathlib4/tree/submission/signed-lap-foundation).
 
 Source: [jesusvilela/connection_laplacian_lean](https://github.com/jesusvilela/connection_laplacian_lean)
 at commit `0b4ad40a7dd26d924bd44096eaa5291c3882a67b`.
@@ -26,8 +26,9 @@ Mathlib standards on the newer toolchain.
    independently verify the positive proof spine. Run negative hardening
    fixtures *as expected-failure tests*, not as ordinary modules.
 2. **Upstream Mathlib:** submit small reusable modules with stable public APIs.
-   The independent signed-Laplacian module, already kernel-checked and
-   Mathlib-linted, is staged on `submission/signed-graph-laplacian`.
+   The small foundation-only candidate is staged at `submission/signed-lap-foundation`
+   and has [successful CI](https://github.com/jesusvilela/mathlib4/actions/runs/41448667166).
+   The fuller signed-Laplacian proof module remains separate.
    No upstream pull request is open.
 
 ## Verification gates
@@ -35,14 +36,17 @@ Mathlib standards on the newer toolchain.
 | Gate | Status |
 | --- | --- |
 | Every original Lean source accounted for | **Source mirrored** (36/36 SHA-equal at staging) |
-| `ConnectionLaplacian.Basic` compiles on fork toolchain | **Pending** |
+| `ConnectionLaplacian.Basic` compiles on fork toolchain | **Passed** after explicit real/matrix imports and current dot-product name; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41455484200) |
 | Complete original theorem spine compiles | **Pending** |
 | Statement-by-statement mathematical correspondence | **Pending** |
 | Transitive axiom and independent checker audit | **Pending** |
 | Hardening battery and negative-test isolation | **Pending** |
 | Community review and upstream acceptance | **Pending** |
 
-The immediate probe is `lake env lean ConnectionLaplacian/Basic.lean`.
+A [dependency-ordered compilation script](check_connection_spine.sh) now tries the
+full 19-file theorem spine, with cached `.olean` outputs between modules.
+The verified `Basic` build is a compiler result, not a transitive-axiom or
+statement-correspondence audit for the old formalization.
 Preserve the original names and statements unless each change is
 mathematically justified and documented. Do not erase the historically
 corrected general-graph balance invariant: total negative-edge parity is
