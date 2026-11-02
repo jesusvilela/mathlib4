@@ -76,9 +76,9 @@ private lemma wrap_decide_pred {u v : G.V} (h : G.graph.Adj u v) :
   -- Goal: decide ((c + if b = true then 1 else 0) % 2 = 1) = xor b (decide (c % 2 = 1))
   cases b with
   | false =>
-      -- Reducing the closed Boolean label is enough: this edge adds no wrap.
-      change decide (c % 2 = 1) = decide (c % 2 = 1)
-      rfl
+      -- The false-edge branch adds zero to the wrap count.
+      have hzero : (if (false : Bool) = true then (1 : ℕ) else 0) = 0 := by decide
+      simp only [hzero, Nat.add_zero, Bool.false_xor]
   | true =>
       simp only [if_true, Bool.true_xor]
       by_cases hc : c % 2 = 1
