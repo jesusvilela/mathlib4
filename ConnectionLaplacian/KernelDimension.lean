@@ -89,7 +89,7 @@ lemma finrank_ker_toLin'_fromBlocks_diag
     {K : Type*} [Field K]
     {l m : Type*} [Fintype l] [DecidableEq l] [Fintype m] [DecidableEq m]
     (A : Matrix l l K) (B : Matrix m m K) :
-    finrank K
+    Module.finrank K
         (LinearMap.ker (Matrix.toLin'
           (Matrix.fromBlocks A (0 : Matrix l m K) (0 : Matrix m l K) B))) =
       Module.finrank K (LinearMap.ker (Matrix.toLin' A)) +
@@ -109,8 +109,8 @@ lemma finrank_ker_toLin'_fromBlocks_diag
       rw [hT_def, Matrix.fromBlocks_mulVec]
       ext i
       cases i with
-      | inl i => simp [Matrix.zero_mulVec, Function.comp]
-      | inr j => simp [Matrix.zero_mulVec, Function.comp]
+      | inl i => simp [Matrix.zero_mulVec] <;> rfl
+      | inr j => simp [Matrix.zero_mulVec] <;> rfl
     rw [hT_mulvec]
     constructor
     · intro hx
@@ -466,7 +466,7 @@ theorem scalarLaplacian_kernel_dim :
     Module.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) =
       G.numComponents := by
   unfold scalarLaplacian numComponents
-  exact (G.graph.card_ConnectedComponent_eq_rank_ker_lapMatrix).symm
+  exact (G.graph.card_connectedComponent_eq_finrank_ker_toLin'_lapMatrix).symm
 
 /-- Trivial bound: the number of odd-wrap components is at most the total
 number of connected components. -/
