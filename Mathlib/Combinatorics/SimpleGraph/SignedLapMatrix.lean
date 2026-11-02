@@ -8,6 +8,9 @@ module
 public import Mathlib.Combinatorics.SimpleGraph.Coloring.EdgeLabeling
 public import Mathlib.Combinatorics.SimpleGraph.LapMatrix
 
+-- The real StarOrderedRing instance is a private import of LapMatrix.
+import Mathlib.Algebra.Order.Star.Real
+
 /-!
 # Signed Laplacian matrices of finite simple graphs
 
@@ -89,10 +92,9 @@ theorem isHermitian_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
 theorem signedAdjMatrix_const_false :
     G.signedAdjMatrix (fun _ => false) = G.adjMatrix ℝ := by
   ext u v
-  change (if h : G.Adj u v then
-      (if (fun _ : G.edgeSet => false).get u v h then (-1 : ℝ) else 1) else 0) =
+  change (if G.Adj u v then (1 : ℝ) else 0) =
     (if G.Adj u v then 1 else 0)
-  by_cases h : G.Adj u v <;> simp [h, EdgeLabeling.get]
+  rfl
 
 /-- The all-positive signed Laplacian is the ordinary graph Laplacian. -/
 @[simp]
@@ -108,10 +110,9 @@ adjacency. -/
 theorem signedAdjMatrix_const_true :
     G.signedAdjMatrix (fun _ => true) = -(G.adjMatrix ℝ) := by
   ext u v
-  change (if h : G.Adj u v then
-      (if (fun _ : G.edgeSet => true).get u v h then (-1 : ℝ) else 1) else 0) =
+  change (if G.Adj u v then (-1 : ℝ) else 0) =
     -(if G.Adj u v then 1 else 0)
-  by_cases h : G.Adj u v <;> simp [h, EdgeLabeling.get]
+  by_cases h : G.Adj u v <;> simp [h]
 
 /-- If all edges are negative, the signed Laplacian is the signless graph Laplacian. -/
 @[simp]
@@ -306,8 +307,40 @@ theorem signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
     Matrix.toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x = 0 ↔
       ∀ i j : V, G.Adj i j →
         x i = G.signedAdjMatrix wrap i j * x j := by
-  simp (disch := intros; positivity)
-    [G.signedLapMatrix_toLinearMap₂' wrap x, sum_eq_zero_iff_of_nonneg, sub_eq_zero]
+  -- Give the energy of one ordered edge a name; this keeps the signed
+  -- transport coefficient intact when we unpack the two finite sums.
+  let e : V → V → ℝ := fun i j =>
+    if G.Adj i j then (x i - G.signedAdjMatrix wrap i j * x j) ^ 2 else 0
+  have he (i j : V) : 0 ≤ e i j := by
+    by_cases hij : G.Adj i j
+    · simpa only [e, if_pos hij] using
+        (sq_nonneg (x i - G.signedAdjMatrix wrap i j * x j))
+    · simp [e, hij]
+  have hrow (i : V) : 0 ≤ ∑ j : V, e i j :=
+    Finset.sum_nonneg (fun j _ => he i j)
+  have hq : Matrix.toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x =
+      (∑ i : V, ∑ j : V, e i j) / 2 := by
+    simpa only [e] using (G.signedLapMatrix_toLinearMap₂' wrap x)
+  rw [hq]
+  have hdiv (y : ℝ) : y / 2 = 0 ↔ y = 0 := by norm_num
+  rw [hdiv]
+  constructor
+  · intro hz i j hij
+    have hi : (∑ j : V, e i j) = 0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg (fun k _ => hrow k)).mp hz i (Finset.mem_univ i)
+    have hij' : e i j = 0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg (fun k _ => he i k)).mp hi j (Finset.mem_univ j)
+    have hs : (x i - G.signedAdjMatrix wrap i j * x j) ^ 2 = 0 := by
+      simpa only [e, if_pos hij] using hij'
+    exact sub_eq_zero.mp (eq_zero_of_pow_eq_zero hs)
+  · intro h
+    apply (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hrow i)).mpr
+    intro i _
+    apply (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => he i j)).mpr
+    intro j _
+    by_cases hij : G.Adj i j
+    · simp [e, hij, h i j hij]
+    · simp [e, hij]
 
 /-- A vector lies in the nullspace exactly when it is a parallel section
 for the signed edge transport.
