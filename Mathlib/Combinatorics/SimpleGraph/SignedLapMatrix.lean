@@ -40,6 +40,23 @@ theorem signedAdjMatrix_apply (wrap : G.EdgeLabeling Bool) (u v : V) :
     G.signedAdjMatrix wrap u v =
       if h : G.Adj u v then if wrap.get u v h then -1 else 1 else 0 := rfl
 
+/-- On an edge, the signed adjacency entry is `-1` or `1` according to its label. -/
+theorem signedAdjMatrix_apply_of_adj (wrap : G.EdgeLabeling Bool) (u v : V)
+    (h : G.Adj u v) :
+    G.signedAdjMatrix wrap u v = if wrap.get u v h then -1 else 1 := by
+  simp [signedAdjMatrix_apply, h]
+
+@[simp]
+theorem signedAdjMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
+    G.signedAdjMatrix wrap v v = 0 := by
+  simp [signedAdjMatrix_apply, G.irrefl]
+
+/-- The diagonal of the signed graph Laplacian is the vertex degree. -/
+@[simp]
+theorem signedLapMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
+    G.signedLapMatrix wrap v v = (G.degree v : ℝ) := by
+  simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply, G.irrefl]
+
 /-- Signed adjacency matrices are symmetric because the labels belong to unoriented edges. -/
 theorem isSymm_signedAdjMatrix (wrap : G.EdgeLabeling Bool) :
     (G.signedAdjMatrix wrap).IsSymm := by
@@ -57,6 +74,12 @@ theorem isSymm_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
     (G.signedLapMatrix wrap).IsSymm := by
   exact (G.isSymm_degMatrix ℝ).sub (G.isSymm_signedAdjMatrix wrap)
 
+/-- Over the reals, symmetry implies that the signed Laplacian is Hermitian. -/
+theorem isHermitian_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
+    (G.signedLapMatrix wrap).IsHermitian := by
+  rw [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial]
+  exact G.isSymm_signedLapMatrix wrap
+
 /-- When every edge has positive sign, the signed adjacency matrix is ordinary adjacency. -/
 @[simp]
 theorem signedAdjMatrix_const_false :
@@ -72,5 +95,21 @@ theorem signedLapMatrix_const_false :
     G.signedLapMatrix (fun _ => false) = G.lapMatrix ℝ := by
   rw [signedLapMatrix, G.signedAdjMatrix_const_false]
   rfl
+
+/-- If all edges are negative, the signed adjacency matrix is the negative of ordinary
+adjacency. -/
+@[simp]
+theorem signedAdjMatrix_const_true :
+    G.signedAdjMatrix (fun _ => true) = -(G.adjMatrix ℝ) := by
+  ext u v
+  by_cases h : G.Adj u v
+  · simp [signedAdjMatrix_apply, h]
+  · simp [signedAdjMatrix_apply, h]
+
+/-- If all edges are negative, the signed Laplacian is the signless graph Laplacian. -/
+@[simp]
+theorem signedLapMatrix_const_true :
+    G.signedLapMatrix (fun _ => true) = G.degMatrix ℝ + G.adjMatrix ℝ := by
+  rw [signedLapMatrix, G.signedAdjMatrix_const_true, sub_neg_eq_add]
 
 end SimpleGraph
