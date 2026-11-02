@@ -189,8 +189,7 @@ lemma eraseEdge_componentMap_mk (e : G.graph.edgeSet) (v : G.V) :
     G.eraseEdge_componentMap e
         ((G.eraseEdge e).graph.connectedComponentMk v) =
       G.graph.connectedComponentMk v := by
-  unfold eraseEdge_componentMap
-  rw [SimpleGraph.ConnectedComponent.map_mk]
+  -- Both the induced component map and its vertex inclusion are identity on vertices.
   rfl
 
 /-- When `e` is not a bridge, the component map is injective. -/
@@ -203,7 +202,7 @@ lemma eraseEdge_componentMap_injective
   | _ u =>
     induction D using SimpleGraph.ConnectedComponent.ind with
     | _ v =>
-      rw [G.eraseEdge_componentMap_mk, G.eraseEdge_componentMap_mk] at h
+      erw [G.eraseEdge_componentMap_mk, G.eraseEdge_componentMap_mk] at h
       have hreach : G.graph.Reachable u v := SimpleGraph.ConnectedComponent.exact h
       have h' : (G.eraseEdge e).graph.Reachable u v :=
         G.reachable_eraseEdge_of_reachable e hnb hreach
@@ -240,7 +239,7 @@ lemma isBalanced_eraseEdge_of_isBalanced
   have hadj : G.graph.Adj u v := G.eraseEdge_le e hadj_G'
   -- Transport the component equation.
   have huC_G : G.graph.connectedComponentMk u = G.eraseEdge_componentMap e C := by
-    rw [← huC, G.eraseEdge_componentMap_mk]
+    erw [← huC, G.eraseEdge_componentMap_mk]
   -- Apply the coloring axiom at G.
   have hbal_G := hε u v hadj huC_G
   -- Wrap predicates agree definitionally.
