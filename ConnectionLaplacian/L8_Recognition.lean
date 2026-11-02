@@ -148,7 +148,9 @@ theorem mobius_kernel_strict_iff_general :
     G.numBalancedComponents_le
   rw [G.connectionLaplacian_kernel_dim_general true,
       G.connectionLaplacian_kernel_dim_general false]
-  simp only [if_true, Bool.false_ne_true, if_neg]
+  -- Reduce closed Boolean branches definitionally, then use natural-number arithmetic.
+  change G.numComponents + G.numBalancedComponents < 2 * G.numComponents ↔
+    G.numBalancedComponents < G.numComponents
   omega
 
 end ConnGraph
