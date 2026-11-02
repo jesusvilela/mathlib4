@@ -54,7 +54,6 @@ theorem signedAdjMatrix_apply_of_adj (wrap : G.EdgeLabeling Bool) (u v : V)
   simp [signedAdjMatrix_apply, h]
 
 omit [Fintype V] [DecidableEq V] in
-@[simp]
 theorem signedAdjMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedAdjMatrix wrap v v = 0 := by
   simp [signedAdjMatrix_apply]
