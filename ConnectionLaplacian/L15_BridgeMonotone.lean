@@ -78,7 +78,7 @@ lemma eraseEdge_le (e : G.graph.edgeSet) :
 vertices (spanning subgraph). -/
 noncomputable def eraseEdge_incl (e : G.graph.edgeSet) :
     (G.eraseEdge e).graph →g G.graph :=
-  SimpleGraph.Hom.mapSpanningSubgraphs (G.eraseEdge_le e)
+  SimpleGraph.Hom.ofLE (G.eraseEdge_le e)
 
 @[simp] lemma eraseEdge_incl_apply (e : G.graph.edgeSet) (v : G.V) :
     G.eraseEdge_incl e v = v := rfl
@@ -158,7 +158,7 @@ lemma reachable_eraseEdge_of_reachable
     have hab : G.graph.Adj a b := (SimpleGraph.mem_edgeSet _).mp he
     have hnot_bridge : ¬ (G.graph.Adj a b ∧
         ∀ p : G.graph.Walk a b, s(a, b) ∈ p.edges) :=
-      fun h => hnb (SimpleGraph.isBridge_iff_adj_and_forall_walk_mem_edges.mpr h)
+      fun h => hnb (SimpleGraph.isBridge_iff_forall_walk_mem_edges.mpr h.2)
     have hexists : ∃ p : G.graph.Walk a b, s(a, b) ∉ p.edges := by
       by_contra hcon
       push_neg at hcon
