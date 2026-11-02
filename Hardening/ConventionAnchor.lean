@@ -65,11 +65,9 @@ example :
   ext u v
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G3, adj3, edge3s, SimpleGraph.degree,
-          SimpleGraph.neighborFinset_eq_filter, Matrix.sub_apply,
-          Matrix.diagonal, Matrix.of_apply, Matrix.cons_val_zero,
-          Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
-          Matrix.vecHead, Matrix.vecTail]
+      SimpleGraph.adjMatrix, G3, adj3, edge3s, SimpleGraph.degree,
+      SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+      Matrix.of_apply, Pi.sub_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
 
 /-- Anchor 3/3 (block level): the connection-Laplacian building blocks.
@@ -79,20 +77,20 @@ pins every convention of the flattened connection Laplacian; the full
 6x6 flatten is additionally verified entrywise by the independent
 implementation in findings/round8 on every battery instance. -/
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(0, 1) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = σx i j := by
+    (G3.edgeMatrix true ⟨(s(0, 1) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (show adj3 0 1 from by decide)⟩) i j = σx i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, σx]
 
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(0, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = I₂ i j := by
+    (G3.edgeMatrix true ⟨(s(0, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (show adj3 0 2 from by decide)⟩) i j = I₂ i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, I₂]
 
 example (i j : Fin 2) :
-    (G3.edgeMatrix true ⟨(s(1, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (by decide)⟩) i j = I₂ i j := by
+    (G3.edgeMatrix true ⟨(s(1, 2) : Sym2 (Fin 3)), by exact (SimpleGraph.mem_edgeSet G3.graph).mpr (show adj3 1 2 from by decide)⟩) i j = I₂ i j := by
   fin_cases i <;> fin_cases j <;> simp [edgeMatrix, G3, wrap3s, I₂]
 
 example (u : Fin 3) (i j : Fin 2) :
     (G3.degreeBlockMatrix u u) i j = (G3.degree u : ℝ) * I₂ i j := by
-  simp only [degreeBlockMatrix, if_pos rfl, Matrix.smul_apply]
-  fin_cases i <;> fin_cases j <;> simp [I₂]
+  fin_cases i <;> fin_cases j <;>
+    simp [degreeBlockMatrix, I₂, Matrix.smul_apply]
 
 end Hardening
