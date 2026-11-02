@@ -65,7 +65,8 @@ example : (show Matrix (Fin 2) (Fin 2) ℝ from G_B1.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B1, A_B1, E_B1, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -108,7 +109,8 @@ example : (show Matrix (Fin 2) (Fin 2) ℝ from G_B2.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B2, A_B2, E_B2, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -151,7 +153,8 @@ example : (show Matrix (Fin 2) (Fin 2) ℝ from G_B3.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B3, A_B3, E_B3, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -194,7 +197,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B4.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B4, A_B4, E_B4, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -237,7 +241,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B5.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B5, A_B5, E_B5, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -280,7 +285,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B6.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B6, A_B6, E_B6, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -323,7 +329,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B7.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B7, A_B7, E_B7, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -366,7 +373,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B8.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B8, A_B8, E_B8, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -409,7 +417,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B9.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B9, A_B9, E_B9, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -452,7 +461,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B10.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B10, A_B10, E_B10, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -495,7 +505,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B11.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B11, A_B11, E_B11, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -538,7 +549,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B12.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B12, A_B12, E_B12, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -581,7 +593,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B13.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B13, A_B13, E_B13, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -624,7 +637,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B14.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B14, A_B14, E_B14, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -667,7 +681,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B15.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B15, A_B15, E_B15, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -710,7 +725,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B16.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B16, A_B16, E_B16, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -753,7 +769,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B17.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B17, A_B17, E_B17, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -796,7 +813,8 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B18.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B18, A_B18, E_B18, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -839,7 +857,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B19.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B19, A_B19, E_B19, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -882,7 +901,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B20.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B20, A_B20, E_B20, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -925,7 +945,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B21.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B21, A_B21, E_B21, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -968,7 +989,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B22.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B22, A_B22, E_B22, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1011,7 +1033,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B23.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B23, A_B23, E_B23, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1054,7 +1077,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B24.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B24, A_B24, E_B24, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1097,7 +1121,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B25.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B25, A_B25, E_B25, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1140,7 +1165,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B26.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B26, A_B26, E_B26, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1183,7 +1209,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B27.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B27, A_B27, E_B27, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1226,7 +1253,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B28.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B28, A_B28, E_B28, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1269,7 +1297,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B29.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B29, A_B29, E_B29, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1312,7 +1341,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B30.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B30, A_B30, E_B30, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1355,7 +1385,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B31.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B31, A_B31, E_B31, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1398,7 +1429,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B32.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B32, A_B32, E_B32, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1441,7 +1473,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B33.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B33, A_B33, E_B33, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1484,7 +1517,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B34.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B34, A_B34, E_B34, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1527,7 +1561,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B35.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B35, A_B35, E_B35, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1570,7 +1605,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B36.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B36, A_B36, E_B36, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1613,7 +1649,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B37.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B37, A_B37, E_B37, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1656,7 +1693,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B38.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B38, A_B38, E_B38, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1699,7 +1737,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B39.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B39, A_B39, E_B39, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1742,7 +1781,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B40.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B40, A_B40, E_B40, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1785,7 +1825,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B41.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B41, A_B41, E_B41, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1828,7 +1869,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B42.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B42, A_B42, E_B42, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1871,7 +1913,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B43.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B43, A_B43, E_B43, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1914,7 +1957,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B44.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B44, A_B44, E_B44, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -1957,7 +2001,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B45.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B45, A_B45, E_B45, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2000,7 +2045,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B46.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B46, A_B46, E_B46, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2043,7 +2089,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B47.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B47, A_B47, E_B47, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2086,7 +2133,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B48.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B48, A_B48, E_B48, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2129,7 +2177,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B49.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B49, A_B49, E_B49, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2172,7 +2221,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B50.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B50, A_B50, E_B50, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2215,7 +2265,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B51.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B51, A_B51, E_B51, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2258,7 +2309,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B52.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B52, A_B52, E_B52, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2301,7 +2353,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B53.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B53, A_B53, E_B53, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2344,7 +2397,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B54.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B54, A_B54, E_B54, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2387,7 +2441,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B55.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B55, A_B55, E_B55, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2430,7 +2485,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B56.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B56, A_B56, E_B56, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2473,7 +2529,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B57.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B57, A_B57, E_B57, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2516,7 +2573,8 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B58.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B58, A_B58, E_B58, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2559,7 +2617,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B59.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B59, A_B59, E_B59, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2602,7 +2661,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B60.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B60, A_B60, E_B60, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2645,7 +2705,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B61.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B61, A_B61, E_B61, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2688,7 +2749,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B62.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B62, A_B62, E_B62, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2731,7 +2793,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B63.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B63, A_B63, E_B63, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2774,7 +2837,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B64.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B64, A_B64, E_B64, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2817,7 +2881,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B65.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B65, A_B65, E_B65, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2860,7 +2925,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B66.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B66, A_B66, E_B66, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2903,7 +2969,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B67.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B67, A_B67, E_B67, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2946,7 +3013,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B68.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B68, A_B68, E_B68, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -2989,7 +3057,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B69.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B69, A_B69, E_B69, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -3032,7 +3101,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B70.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B70, A_B70, E_B70, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -3075,7 +3145,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B71.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B71, A_B71, E_B71, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -3118,7 +3189,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B72.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B72, A_B72, E_B72, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -3161,7 +3233,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B73.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B73, A_B73, E_B73, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
@@ -3204,7 +3277,8 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B74.scalarLaplacian) =
   fin_cases u <;> fin_cases v <;>
     simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
           SimpleGraph.adjMatrix, G_B74, A_B74, E_B74, SimpleGraph.degree,
-          SimpleGraph.neighborFinset, Matrix.of_apply, Matrix.cons_val_zero,
+          SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
+          Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
           Matrix.vecHead, Matrix.vecTail, Zero.toOfNat0, Matrix.zero_apply]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | decide | norm_num
