@@ -273,4 +273,32 @@ theorem posSemidef_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
   rw [star_trivial, ← toLinearMap₂'_apply', G.signedLapMatrix_toLinearMap₂' wrap x]
   positivity
 
+/-! ### Characterizing the kernel through edgewise parallel sections -/
+
+/-- The signed Laplacian has zero energy precisely when the vector is compatible
+with transport across every signed edge.
+
+A positive edge requires equal endpoint values. A negative edge requires
+opposite endpoint values. This is the local parallel-section condition. -/
+theorem signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
+    (wrap : G.EdgeLabeling Bool) (x : V → ℝ) :
+    Matrix.toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x = 0 ↔
+      ∀ i j : V, G.Adj i j →
+        x i = G.signedAdjMatrix wrap i j * x j := by
+  simp (disch := intros; positivity)
+    [G.signedLapMatrix_toLinearMap₂' wrap x, sum_eq_zero_iff_of_nonneg, sub_eq_zero]
+
+/-- A vector lies in the nullspace exactly when it is a parallel section
+for the signed edge transport.
+
+This is the signed-graph analogue of
+`SimpleGraph.lapMatrix_mulVec_eq_zero_iff_forall_adj`. -/
+theorem signedLapMatrix_mulVec_eq_zero_iff_forall_adj
+    (wrap : G.EdgeLabeling Bool) {x : V → ℝ} :
+    G.signedLapMatrix wrap *ᵥ x = 0 ↔
+      ∀ i j : V, G.Adj i j →
+        x i = G.signedAdjMatrix wrap i j * x j := by
+  rw [← (G.posSemidef_signedLapMatrix wrap).toLinearMap₂'_zero_iff, star_trivial,
+      G.signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj wrap x]
+
 end SimpleGraph
