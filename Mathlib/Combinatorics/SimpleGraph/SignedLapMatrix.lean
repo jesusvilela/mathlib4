@@ -157,7 +157,7 @@ theorem posSemidef_signedLapMatrix_const_true :
 theorem signedAdjMatrix_sq_apply_of_adj (wrap : G.EdgeLabeling Bool)
     {i j : V} (h : G.Adj i j) :
     (G.signedAdjMatrix wrap i j) * (G.signedAdjMatrix wrap i j) = 1 := by
-  rw [G.signedAdjMatrix_apply_of_adj wrap i j h]
+  simp only [G.signedAdjMatrix_apply_of_adj wrap i j h]
   split_ifs <;> norm_num
 
 /-- Expand the energy of a signed Laplacian into its diagonal and off-diagonal parts. -/
