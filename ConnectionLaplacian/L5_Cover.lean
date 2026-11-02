@@ -102,8 +102,8 @@ lemma coverAdj_irrefl : ∀ (x : G.CoverV), ¬ G.coverAdj x x := by
 /-- The orientation double cover as a `SimpleGraph` on `G.V × Bool`. -/
 def coverGraph : SimpleGraph G.CoverV where
   Adj := G.coverAdj
-  symm _ _ := G.coverAdj_symm
-  loopless := G.coverAdj_irrefl
+  symm := ⟨fun _ _ h => G.coverAdj_symm h⟩
+  loopless := ⟨G.coverAdj_irrefl⟩
 
 instance : DecidableRel G.coverGraph.Adj :=
   (inferInstance : DecidableRel G.coverAdj)
@@ -123,7 +123,7 @@ def deck : G.CoverV → G.CoverV := fun x => (x.1, !x.2)
 /-- `deck` is an involution. -/
 lemma deck_involution : ∀ x : G.CoverV, G.deck (G.deck x) = x := by
   intro ⟨v, b⟩
-  simp [deck, Bool.not_not]
+  cases b <;> rfl
 
 /-- `deck` is a graph automorphism of the cover. -/
 lemma deck_adj_iff : ∀ x y : G.CoverV,
@@ -216,6 +216,7 @@ private lemma Pcov_mul_Pcov :
      = (2 : ℝ) • (1 : Matrix G.CoverV G.CoverV ℝ)
   rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, RhatBool_sq,
       Matrix.kronecker_smul, Matrix.one_kronecker_one]
+  rfl
 
 private lemma Pcov_inv_eq : G.Pcov⁻¹ = (1/2 : ℝ) • G.Pcov := by
   apply Matrix.inv_eq_right_inv
@@ -315,7 +316,7 @@ private lemma cover_lap_entry (u v : G.V) (b c : Bool) :
   simp only [Matrix.sub_apply]
   rw [SimpleGraph.degMatrix, SimpleGraph.adjMatrix_apply, Matrix.diagonal_apply]
   by_cases h : (u, b) = (v, c)
-  · obtain ⟨rfl, rfl⟩ : u = v ∧ b = c := Prod.mk.inj_iff.mp h
+  · obtain ⟨rfl, rfl⟩ : u = v ∧ b = c := ⟨congrArg Prod.fst h, congrArg Prod.snd h⟩
     simp only [if_true, G.coverGraph_degree_eq u b]
   · rw [if_neg h, if_neg h]
 
@@ -328,11 +329,11 @@ private lemma covBlock_diag (u : G.V) :
   · subst hij
     have h_eq : ((u, i) : G.CoverV) = (u, i) := rfl
     rw [if_pos h_eq]
-    have hirr : ¬ G.coverGraph.Adj (u, i) (u, i) := G.coverGraph.loopless _
+    have hirr : ¬ G.coverGraph.Adj (u, i) (u, i) := G.coverGraph.irrefl
     rw [if_neg hirr]
     simp [Matrix.smul_apply, Matrix.one_apply_eq]
   · have h_ne : ((u, i) : G.CoverV) ≠ (u, j) := by
-      intro heq; exact hij (Prod.mk.inj_iff.mp heq).2
+      intro heq; exact hij congrArg Prod.snd heq
     rw [if_neg h_ne]
     have hirr : ¬ G.coverGraph.Adj (u, i) (u, j) := by
       intro hadj
@@ -348,7 +349,7 @@ private lemma covBlock_nonwrap (u v : G.V) (huv : u ≠ v) (hadj : G.graph.Adj u
   ext i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv (Prod.mk.inj_iff.mp heq).1
+    intro heq; exact huv congrArg Prod.fst heq
   rw [if_neg h_ne]
   by_cases hij : i = j
   · subst hij
@@ -373,7 +374,7 @@ private lemma covBlock_wrap (u v : G.V) (huv : u ≠ v) (hadj : G.graph.Adj u v)
   intro i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv (Prod.mk.inj_iff.mp heq).1
+    intro heq; exact huv congrArg Prod.fst heq
   rw [if_neg h_ne]
   by_cases hij : i = j
   · subst hij
@@ -396,7 +397,7 @@ private lemma covBlock_nonadj (u v : G.V) (huv : u ≠ v) (hnadj : ¬ G.graph.Ad
   ext i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv (Prod.mk.inj_iff.mp heq).1
+    intro heq; exact huv congrArg Prod.fst heq
   rw [if_neg h_ne]
   have hcnadj : ¬ G.coverGraph.Adj (u, i) (v, j) := by
     intro hadj'
@@ -598,10 +599,10 @@ Laplacian acts as the corresponding base Laplacian. Alternatively, derive
 from `scalarLap_cover_splits` via `rank_reindex` + similarity-invariance
 of kernel dim + block-diagonal kernel decomposition. -/
 theorem scalarLap_cover_kernel_dim :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' G.orientationDoubleCover.scalarLaplacian)) =
-      FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) +
-      FiniteDimensional.finrank ℝ
+      Module.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) +
+      Module.finrank ℝ
           (LinearMap.ker (toLin' G.signedLaplacianMobius)) := by
   obtain ⟨P, hPdet, hreindex⟩ := G.scalarLap_cover_splits
   -- Normalize `hreindex`: the `show Matrix G.CoverV G.CoverV ℝ from ...` creates a `let_fun`
@@ -611,15 +612,15 @@ theorem scalarLap_cover_kernel_dim :
     Matrix.fromBlocks G.scalarLaplacian 0 0 G.signedLaplacianMobius at hreindex
   -- Similarity preserves kernel dim.
   have hsim :
-      finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.Lcov * P⁻¹))) =
-      finrank ℝ (LinearMap.ker (Matrix.toLin' G.Lcov)) :=
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.Lcov * P⁻¹))) =
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' G.Lcov)) :=
     finrank_ker_toLin'_conj P G.Lcov hPdet
   -- Reindex preserves kernel dim.
   have hreidx :
-      finrank ℝ (LinearMap.ker (Matrix.toLin'
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin'
         (Matrix.reindex G.prodBoolEquivSum G.prodBoolEquivSum
           (P * G.Lcov * P⁻¹)))) =
-      finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.Lcov * P⁻¹))) :=
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.Lcov * P⁻¹))) :=
     finrank_ker_toLin'_reindex G.prodBoolEquivSum _
   -- Rewrite the reindexed term as the fromBlocks RHS.
   rw [hreindex] at hreidx
@@ -628,7 +629,7 @@ theorem scalarLap_cover_kernel_dim :
     finrank_ker_toLin'_fromBlocks_diag (K := ℝ)
       G.scalarLaplacian G.signedLaplacianMobius
   -- Goal uses `G.orientationDoubleCover.scalarLaplacian`, `hsim` uses `G.Lcov` (defeq).
-  change finrank ℝ (LinearMap.ker (toLin' G.Lcov)) = _
+  change Module.finrank ℝ (LinearMap.ker (toLin' G.Lcov)) = _
   linarith [hsim, hreidx, hsplit]
 
 end ConnGraph
