@@ -128,14 +128,8 @@ private lemma sLM_quadForm_raw (x : G.V → ℝ) :
       (∑ i : G.V, ((G.graph.neighborFinset i).card : ℝ) * (x i * x i))
         + ∑ i : G.V, ∑ j : G.V,
             if G.graph.Adj i j then G.signedWeight i j * x i * x j else 0 := by
-  unfold dotProduct mulVec
-  simp only [Matrix.dotProduct]
-  -- Step 1: Rewrite x i * (∑_j M i j * x j) = ∑_j x_i * (M i j * x j).
-  have step1 : ∀ i : G.V,
-      x i * (∑ j : G.V, G.signedLaplacianMobius i j * x j) =
-        ∑ j : G.V, x i * (G.signedLaplacianMobius i j * x j) := by
-    intro i; rw [Finset.mul_sum]
-  simp only [step1]
+  -- Expand the matrix-vector product and distribute the inner finite sum.
+  simp only [dotProduct, mulVec, Finset.mul_sum]
   -- Step 2: Apply sLM_entry_eq inside.
   have step2 : ∀ i j : G.V, x i * (G.signedLaplacianMobius i j * x j) =
       (if i = j then ((G.graph.neighborFinset i).card : ℝ) * (x i * x i) else 0)
@@ -312,12 +306,8 @@ private theorem sLM_quadForm_nonneg (x : G.V → ℝ) :
 semidefinite. -/
 theorem signedLaplacianMobius_posSemidef :
     G.signedLaplacianMobius.PosSemidef := by
-  refine ⟨G.signedLaplacianMobius_isHermitian, ?_⟩
-  intro x
-  -- On ℝ, `star x = x` (trivial star). Reduce to the real-valued form.
-  have hstar : (star x : G.V → ℝ) = x := by
-    funext i; exact star_trivial (x i)
-  rw [hstar]
+  refine .of_dotProduct_mulVec_nonneg G.signedLaplacianMobius_isHermitian (fun x ↦ ?_)
+  rw [star_trivial]
   exact G.sLM_quadForm_nonneg x
 
 end ConnGraph
