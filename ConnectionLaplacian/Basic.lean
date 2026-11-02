@@ -12,9 +12,9 @@ We work over ℝ throughout. Mathlib's Matrix infrastructure provides what
 we need for the block structure and eigenvalue statements.
 -/
 
-import Mathlib.LinearAlgebra.Matrix.Spectrum
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.Combinatorics.SimpleGraph.Basic
-import Mathlib.Combinatorics.SimpleGraph.Path
+import Mathlib.Combinatorics.SimpleGraph.Paths
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Matrix.Block
 
