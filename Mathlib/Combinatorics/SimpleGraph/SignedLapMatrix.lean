@@ -215,7 +215,7 @@ theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
   let S : ℝ := ∑ i : V, ∑ j : V,
     if G.Adj i j then x i * x i - x i * (A i j * x j) else 0
   have hA_symm (i j : V) : A i j = A j i :=
-    (G.isSymm_signedAdjMatrix wrap).apply i j
+    (G.isSymm_signedAdjMatrix wrap).apply j i
   have hA_sq (i j : V) (h : G.Adj i j) :
       (A i j) * (A i j) = 1 :=
     G.signedAdjMatrix_sq_apply_of_adj wrap h
