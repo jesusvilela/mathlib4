@@ -31,5 +31,23 @@ jobs:
           build-args: Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
           test: false
           lint: false
+          mk_all-check: true
+          leanchecker: true
+          leanchecker-args: Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
           use-mathlib-cache: true
           use-github-cache: true
+      - name: Report transitive axioms of the signed-Laplacian theorems
+        shell: bash
+        run: |
+          cat > /tmp/SignedLapAxiomAudit.lean <<'EOF'
+          import Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
+          #print axioms SimpleGraph.signedLapMatrix_toLinearMap₂'
+          #print axioms SimpleGraph.posSemidef_signedLapMatrix
+          #print axioms SimpleGraph.signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
+          #print axioms SimpleGraph.signedLapMatrix_mulVec_eq_zero_iff_forall_adj
+          EOF
+          lake env lean /tmp/SignedLapAxiomAudit.lean | tee /tmp/signed-laplacian-axioms.txt
+          if grep -Eq 'sorryAx|Lean.ofReduceBool|native_decide' /tmp/signed-laplacian-axioms.txt; then
+            echo 'Nonstandard proof bypass detected in transitive axioms'
+            exit 1
+          fi
