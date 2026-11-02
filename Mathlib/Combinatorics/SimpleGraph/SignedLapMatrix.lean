@@ -40,21 +40,21 @@ def signedAdjMatrix (wrap : G.EdgeLabeling Bool) : Matrix V V ℝ :=
 def signedLapMatrix (wrap : G.EdgeLabeling Bool) : Matrix V V ℝ :=
   G.degMatrix ℝ - G.signedAdjMatrix wrap
 
-@[simp]
 omit [Fintype V] [DecidableEq V] in
+@[simp]
 theorem signedAdjMatrix_apply (wrap : G.EdgeLabeling Bool) (u v : V) :
     G.signedAdjMatrix wrap u v =
       if h : G.Adj u v then if wrap.get u v h then -1 else 1 else 0 := rfl
 
-/-- On an edge, the signed adjacency entry is `-1` or `1` according to its label. -/
 omit [Fintype V] [DecidableEq V] in
+/-- On an edge, the signed adjacency entry is `-1` or `1` according to its label. -/
 theorem signedAdjMatrix_apply_of_adj (wrap : G.EdgeLabeling Bool) (u v : V)
     (h : G.Adj u v) :
     G.signedAdjMatrix wrap u v = if wrap.get u v h then -1 else 1 := by
   simp [signedAdjMatrix_apply, h]
 
-@[simp]
 omit [Fintype V] [DecidableEq V] in
+@[simp]
 theorem signedAdjMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedAdjMatrix wrap v v = 0 := by
   simp [signedAdjMatrix_apply]
@@ -65,8 +65,8 @@ theorem signedLapMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedLapMatrix wrap v v = (G.degree v : ℝ) := by
   simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply]
 
-/-- Signed adjacency matrices are symmetric because the labels belong to unoriented edges. -/
 omit [Fintype V] [DecidableEq V] in
+/-- Signed adjacency matrices are symmetric because the labels belong to unoriented edges. -/
 theorem isSymm_signedAdjMatrix (wrap : G.EdgeLabeling Bool) :
     (G.signedAdjMatrix wrap).IsSymm := by
   apply Matrix.IsSymm.ext
@@ -89,9 +89,9 @@ theorem isHermitian_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
   rw [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial]
   exact G.isSymm_signedLapMatrix wrap
 
+omit [Fintype V] [DecidableEq V] in
 /-- When every edge has positive sign, the signed adjacency matrix is ordinary adjacency. -/
 @[simp]
-omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_const_false :
     G.signedAdjMatrix (fun _ => false) = G.adjMatrix ℝ := by
   ext u v
@@ -107,10 +107,10 @@ theorem signedLapMatrix_const_false :
     G.degMatrix ℝ - G.adjMatrix ℝ
   rw [G.signedAdjMatrix_const_false]
 
+omit [Fintype V] [DecidableEq V] in
 /-- If all edges are negative, the signed adjacency matrix is the negative of ordinary
 adjacency. -/
 @[simp]
-omit [Fintype V] [DecidableEq V] in
 theorem signedAdjMatrix_const_true :
     G.signedAdjMatrix (fun _ => true) = -(G.adjMatrix ℝ) := by
   ext u v
@@ -171,8 +171,8 @@ theorem posSemidef_signedLapMatrix_const_true :
 
 /-! ### Arbitrary edge signings -/
 
-/-- Every signed adjacency entry on an edge has square one. -/
 omit [Fintype V] [DecidableEq V] in
+/-- Every signed adjacency entry on an edge has square one. -/
 theorem signedAdjMatrix_sq_apply_of_adj (wrap : G.EdgeLabeling Bool)
     {i j : V} (h : G.Adj i j) :
     (G.signedAdjMatrix wrap i j) * (G.signedAdjMatrix wrap i j) = 1 := by
@@ -212,7 +212,7 @@ private theorem signedLapMatrix_quadForm_raw (wrap : G.EdgeLabeling Bool) (x : V
   intro j _
   by_cases h : G.Adj i j
   · simp only [ite_eq_left h]
-  · simp [h]
+  · simp [signedAdjMatrix, h]
 
 /-- The energy of a signed Laplacian is a sum of squared edge differences.
 
