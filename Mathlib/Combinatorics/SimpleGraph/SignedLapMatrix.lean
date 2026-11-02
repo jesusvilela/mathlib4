@@ -22,6 +22,8 @@ This module provides the initial definitions and elementary compatibility lemmas
 
 @[expose] public section
 
+open Finset Matrix Module
+
 namespace SimpleGraph
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
@@ -111,5 +113,39 @@ theorem signedAdjMatrix_const_true :
 theorem signedLapMatrix_const_true :
     G.signedLapMatrix (fun _ => true) = G.degMatrix ℝ + G.adjMatrix ℝ := by
   rw [signedLapMatrix, G.signedAdjMatrix_const_true, sub_neg_eq_add]
+
+/-! ### The signless Laplacian (the all-negative signing) -/
+
+/-- The quadratic form of the signless Laplacian is the sum of squared endpoint sums,
+where each unoriented edge occurs twice. -/
+theorem signlessLapMatrix_toLinearMap₂' (x : V → ℝ) :
+    toLinearMap₂' ℝ (G.degMatrix ℝ + G.adjMatrix ℝ) x x =
+      (∑ i : V, ∑ j : V, if G.Adj i j then (x i + x j) ^ 2 else 0) / 2 := by
+  simp_rw [toLinearMap₂'_apply', add_mulVec, dotProduct_add, dotProduct_mulVec_degMatrix,
+    dotProduct_mulVec_adjMatrix, ← sum_add_distrib, degree_eq_sum_if_adj, sum_mul, ite_mul,
+    one_mul, zero_mul, ← sum_add_distrib, ite_add_ite, add_zero]
+  rw [← add_self_div_two (∑ i : V, ∑ j : V, _)]
+  conv_lhs => enter [1, 2, 2, i, 2, j]; rw [if_congr (adj_comm G i j) rfl rfl]
+  conv_lhs => enter [1, 2]; rw [Finset.sum_comm]
+  simp_rw [← sum_add_distrib, ite_add_ite]
+  congr 2 with i
+  congr 2 with j
+  ring_nf
+
+/-- The signless graph Laplacian is positive semidefinite. -/
+theorem posSemidef_signlessLapMatrix :
+    (G.degMatrix ℝ + G.adjMatrix ℝ).PosSemidef := by
+  refine .of_dotProduct_mulVec_nonneg ?_ (fun x ↦ ?_)
+  · rw [IsHermitian, conjTranspose_eq_transpose_of_trivial]
+    exact (G.isSymm_degMatrix ℝ).add (G.isSymm_adjMatrix)
+  · rw [star_trivial, ← toLinearMap₂'_apply', G.signlessLapMatrix_toLinearMap₂']
+    positivity
+
+/-- In particular, the signed graph Laplacian is positive semidefinite when
+all edges are negatively signed. -/
+theorem posSemidef_signedLapMatrix_const_true :
+    (G.signedLapMatrix (fun _ => true)).PosSemidef := by
+  rw [G.signedLapMatrix_const_true]
+  exact G.posSemidef_signlessLapMatrix
 
 end SimpleGraph
