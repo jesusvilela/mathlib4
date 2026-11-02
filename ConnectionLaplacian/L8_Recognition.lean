@@ -148,10 +148,8 @@ theorem mobius_kernel_strict_iff_general :
     G.numBalancedComponents_le
   rw [G.connectionLaplacian_kernel_dim_general true,
       G.connectionLaplacian_kernel_dim_general false]
-  simp only [if_true, if_false]
-  constructor
-  · intro h; omega
-  · intro h; omega
+  simp only [if_true, Bool.false_ne_true, if_neg]
+  omega
 
 end ConnGraph
 
