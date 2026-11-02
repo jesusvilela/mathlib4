@@ -200,10 +200,10 @@ private theorem signedLapMatrix_quadForm_raw (wrap : G.EdgeLabeling Bool) (x : V
 /-- The energy of a signed Laplacian is a sum of squared edge differences.
 
 The sum is over *ordered* adjacent vertex pairs, so every undirected
-edge occurs twice and the formula includes the factor \`1 / 2\`.
+edge occurs twice and the formula includes the factor `1 / 2`.
 For a negatively signed edge, the corresponding square is
-\`(x i + x j) ^ 2\`; for a positively signed edge it is
-\`(x i - x j) ^ 2\`. -/
+`(x i + x j) ^ 2`; for a positively signed edge it is
+`(x i - x j) ^ 2`. -/
 theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
     (x : V → ℝ) :
     toLinearMap₂' ℝ (G.signedLapMatrix wrap) x x =
@@ -229,7 +229,7 @@ theorem signedLapMatrix_toLinearMap₂' (wrap : G.EdgeLabeling Bool)
     intro j _
     by_cases h : G.Adj i j
     · have h' : G.Adj j i := h.symm
-      rw [if_pos h', if_pos h, ← hA_symm i j]
+      rw [if_pos h', if_pos h, hA_symm j i]
       ring
     · have h' : ¬ G.Adj j i := fun hj => h hj.symm
       simp [h, h']
