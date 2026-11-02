@@ -337,7 +337,7 @@ theorem numBalancedComponents_of_isTree (hT : G.graph.IsTree) :
 
 /-- **Möbius kernel dimension on trees equals 2.** -/
 theorem connectionLaplacian_kernel_dim_tree_mobius (hT : G.graph.IsTree) :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian true))) = 2 := by
   rw [G.connectionLaplacian_kernel_dim_general true]
   rw [if_pos rfl]
@@ -345,7 +345,7 @@ theorem connectionLaplacian_kernel_dim_tree_mobius (hT : G.graph.IsTree) :
 
 /-- **Flat kernel dimension on trees equals 2.** -/
 theorem connectionLaplacian_kernel_dim_tree_flat (hT : G.graph.IsTree) :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian false))) = 2 := by
   rw [G.connectionLaplacian_kernel_dim_general false]
   rw [if_neg (by decide : (false : Bool) ≠ true)]
@@ -354,9 +354,9 @@ theorem connectionLaplacian_kernel_dim_tree_flat (hT : G.graph.IsTree) :
 /-- **Tree kernel-gap vanishes.** On a tree, flat and Möbius
 Laplacians have the same kernel dimension. -/
 theorem tree_kernel_gap_zero (hT : G.graph.IsTree) :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian true))) =
-      FiniteDimensional.finrank ℝ
+      Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian false))) := by
   rw [G.connectionLaplacian_kernel_dim_tree_mobius hT,
       G.connectionLaplacian_kernel_dim_tree_flat hT]
