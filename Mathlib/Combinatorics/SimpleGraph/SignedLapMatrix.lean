@@ -89,16 +89,18 @@ theorem isHermitian_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
 theorem signedAdjMatrix_const_false :
     G.signedAdjMatrix (fun _ => false) = G.adjMatrix ℝ := by
   ext u v
-  by_cases h : G.Adj u v
-  · simp [signedAdjMatrix_apply, EdgeLabeling.get, h]
-  · simp [signedAdjMatrix_apply, h]
+  change (if h : G.Adj u v then
+      (if (fun _ : G.edgeSet => false).get u v h then (-1 : ℝ) else 1) else 0) =
+    (if G.Adj u v then 1 else 0)
+  by_cases h : G.Adj u v <;> simp [h, EdgeLabeling.get]
 
 /-- The all-positive signed Laplacian is the ordinary graph Laplacian. -/
 @[simp]
 theorem signedLapMatrix_const_false :
     G.signedLapMatrix (fun _ => false) = G.lapMatrix ℝ := by
-  rw [signedLapMatrix, G.signedAdjMatrix_const_false]
-  rfl
+  change G.degMatrix ℝ - G.signedAdjMatrix (fun _ => false) =
+    G.degMatrix ℝ - G.adjMatrix ℝ
+  rw [G.signedAdjMatrix_const_false]
 
 /-- If all edges are negative, the signed adjacency matrix is the negative of ordinary
 adjacency. -/
@@ -106,15 +108,18 @@ adjacency. -/
 theorem signedAdjMatrix_const_true :
     G.signedAdjMatrix (fun _ => true) = -(G.adjMatrix ℝ) := by
   ext u v
-  by_cases h : G.Adj u v
-  · simp [signedAdjMatrix_apply, h]
-  · simp [signedAdjMatrix_apply, h]
+  change (if h : G.Adj u v then
+      (if (fun _ : G.edgeSet => true).get u v h then (-1 : ℝ) else 1) else 0) =
+    -(if G.Adj u v then 1 else 0)
+  by_cases h : G.Adj u v <;> simp [h, EdgeLabeling.get]
 
 /-- If all edges are negative, the signed Laplacian is the signless graph Laplacian. -/
 @[simp]
 theorem signedLapMatrix_const_true :
     G.signedLapMatrix (fun _ => true) = G.degMatrix ℝ + G.adjMatrix ℝ := by
-  rw [signedLapMatrix, G.signedAdjMatrix_const_true, sub_neg_eq_add]
+  change G.degMatrix ℝ - G.signedAdjMatrix (fun _ => true) =
+    G.degMatrix ℝ + G.adjMatrix ℝ
+  rw [G.signedAdjMatrix_const_true, sub_neg_eq_add]
 
 /-! ### The signless Laplacian (the all-negative signing) -/
 
@@ -141,7 +146,15 @@ theorem posSemidef_signlessLapMatrix :
   · rw [IsHermitian, conjTranspose_eq_transpose_of_trivial]
     exact (G.isSymm_degMatrix ℝ).add (G.isSymm_adjMatrix)
   · rw [star_trivial, ← toLinearMap₂'_apply', G.signlessLapMatrix_toLinearMap₂']
-    positivity
+    apply div_nonneg
+    · apply Finset.sum_nonneg
+      intro i _
+      apply Finset.sum_nonneg
+      intro j _
+      by_cases h : G.Adj i j
+      · simp [h, sq_nonneg]
+      · simp [h]
+    · norm_num
 
 /-- In particular, the signed graph Laplacian is positive semidefinite when
 all edges are negatively signed. -/
@@ -170,7 +183,7 @@ private theorem signedLapMatrix_quadForm_raw (wrap : G.EdgeLabeling Bool) (x : V
       x ⬝ᵥ (G.signedAdjMatrix wrap *ᵥ x) =
         ∑ i : V, ∑ j : V,
           x i * (G.signedAdjMatrix wrap i j * x j) := by
-    simp only [Matrix.dotProduct, Matrix.mulVec]
+    simp only [dotProduct, mulVec]
     simp_rw [Finset.mul_sum]
   have hDegree (i : V) :
       (G.degree i : ℝ) * x i * x i =
@@ -271,7 +284,15 @@ theorem posSemidef_signedLapMatrix (wrap : G.EdgeLabeling Bool) :
     (G.signedLapMatrix wrap).PosSemidef := by
   refine .of_dotProduct_mulVec_nonneg (G.isHermitian_signedLapMatrix wrap) (fun x ↦ ?_)
   rw [star_trivial, ← toLinearMap₂'_apply', G.signedLapMatrix_toLinearMap₂' wrap x]
-  positivity
+  apply div_nonneg
+  · apply Finset.sum_nonneg
+    intro i _
+    apply Finset.sum_nonneg
+    intro j _
+    by_cases h : G.Adj i j
+    · simp [h, sq_nonneg]
+    · simp [h]
+  · norm_num
 
 /-! ### Characterizing the kernel through edgewise parallel sections -/
 
