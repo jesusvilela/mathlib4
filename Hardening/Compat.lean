@@ -1,21 +1,16 @@
 /-
-Compatibility shims for the comparator kernel-builtin export list.
+Hardening/Compat.lean — modern Lean comparator compatibility note
 
-`comparator` (Lean FRO) asks `lean4export` for a fixed list of kernel
-builtin constants. Two names on that list, `String.ofList` and
-`eagerReduce`, only exist in Lean >= 4.16 / >= 4.13 kernels and are
-absent from this project's Lean v4.11.0 environment. This module
-defines inert stand-ins with those exact names so that the export
-requested by the *unmodified* comparator binary succeeds.
+The original Lean 4.11 research repository carried inert stand-ins for
+String.ofList and eagerReduce because they were missing from that toolchain
+but requested by a newer comparator/exporter.
 
-Both `Hardening.Challenge` and `Hardening.Solution` import this file,
-so the stand-ins are byte-identical in both exports. They are ordinary
-safe definitions, are compared like every other shared constant, and
-participate in the kernel replay. No theorem below uses them.
+The current Mathlib fork uses a newer Lean toolchain providing these names
+itself. Redeclaring them would conflict with kernel/builtin definitions.
+The legacy shims are therefore intentionally absent in this migration.
+No statement or proof in the trusted ConnectionLaplacian spine depends on
+them, and this compatibility file is outside that spine.
+
+Historical comparator transcripts, external dual-kernel replay, and
+intentional negative controls remain independent of compilation here.
 -/
-
-/-- Stand-in for the Lean >= 4.16 alias of `String.mk`. -/
-def String.ofList (data : List Char) : String := ⟨data⟩
-
-/-- Stand-in for the Lean >= 4.13 kernel constant `eagerReduce`. -/
-def eagerReduce (n : Nat) : Nat := n
