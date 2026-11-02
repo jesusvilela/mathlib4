@@ -27,7 +27,7 @@ invariant across the cover.
 -/
 
 import ConnectionLaplacian.L5_Cover
-import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
 
 namespace ConnectionLaplacian
 
