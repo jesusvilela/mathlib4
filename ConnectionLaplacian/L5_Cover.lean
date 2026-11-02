@@ -251,24 +251,23 @@ private lemma coverAdj_iff (u v : G.V) (b c : Bool) :
 private lemma coverGraph_degree_eq (u : G.V) (b : Bool) :
     G.coverGraph.degree (u, b) = G.graph.degree u := by
   classical
+  letI : Fintype (G.coverGraph.neighborSet (u, b)) :=
+    Fintype.ofFinite _
   set f : G.V → G.CoverV := fun v =>
     if h : G.graph.Adj u v then
       if G.wrap ⟨s(u, v), (SimpleGraph.mem_edgeSet G.graph).mpr h⟩ then (v, !b) else (v, b)
     else (v, b)
   have f_target : ∀ v, G.graph.Adj u v → G.coverGraph.Adj (u, b) (f v) := by
     intro v hv
-    simp only [f, dif_pos hv]
+    change G.coverAdj (u, b) (f v)
+    simp only [f, dite_eq_left hv]
     by_cases hw : G.wrap ⟨s(u, v), (SimpleGraph.mem_edgeSet G.graph).mpr hv⟩
-    · rw [if_pos hw]
-      show G.coverAdj (u, b) (v, !b)
-      rw [show G.coverAdj (u, b) (v, !b) ↔ _ from G.coverAdj_iff u v b (!b)]
-      refine ⟨hv, ?_⟩
-      simp [hw, Bool.not_eq_self]
-    · rw [if_neg hw]
-      show G.coverAdj (u, b) (v, b)
-      rw [show G.coverAdj (u, b) (v, b) ↔ _ from G.coverAdj_iff u v b b]
-      refine ⟨hv, ?_⟩
-      simp [hw]
+    · rw [ite_eq_left hw]
+      rw [G.coverAdj_iff u v b (!b)]
+      exact ⟨hv, by simp [hw]⟩
+    · rw [ite_eq_right hw]
+      rw [G.coverAdj_iff u v b b]
+      exact ⟨hv, by simp [hw]⟩
   unfold SimpleGraph.degree SimpleGraph.neighborFinset SimpleGraph.neighborSet
   rw [Set.toFinset_setOf, Set.toFinset_setOf]
   symm
@@ -311,6 +310,7 @@ private lemma cover_lap_entry (u v : G.V) (b c : Bool) :
     G.orientationDoubleCover.scalarLaplacian (u, b) (v, c) =
       (if (u, b) = (v, c) then (G.graph.degree u : ℝ) else 0)
       - (if G.coverGraph.Adj (u, b) (v, c) then 1 else 0) := by
+  classical
   show G.coverGraph.lapMatrix ℝ (u, b) (v, c) = _
   rw [SimpleGraph.lapMatrix]
   simp only [Matrix.sub_apply]
@@ -333,7 +333,7 @@ private lemma covBlock_diag (u : G.V) :
     rw [if_neg hirr]
     simp [Matrix.smul_apply, Matrix.one_apply_eq]
   · have h_ne : ((u, i) : G.CoverV) ≠ (u, j) := by
-      intro heq; exact hij congrArg Prod.snd heq
+      intro heq; exact hij (congrArg Prod.snd heq)
     rw [if_neg h_ne]
     have hirr : ¬ G.coverGraph.Adj (u, i) (u, j) := by
       intro hadj
@@ -349,7 +349,7 @@ private lemma covBlock_nonwrap (u v : G.V) (huv : u ≠ v) (hadj : G.graph.Adj u
   ext i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv congrArg Prod.fst heq
+    intro heq; exact huv (congrArg Prod.fst heq)
   rw [if_neg h_ne]
   by_cases hij : i = j
   · subst hij
@@ -374,7 +374,7 @@ private lemma covBlock_wrap (u v : G.V) (huv : u ≠ v) (hadj : G.graph.Adj u v)
   intro i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv congrArg Prod.fst heq
+    intro heq; exact huv (congrArg Prod.fst heq)
   rw [if_neg h_ne]
   by_cases hij : i = j
   · subst hij
@@ -397,7 +397,7 @@ private lemma covBlock_nonadj (u v : G.V) (huv : u ≠ v) (hnadj : ¬ G.graph.Ad
   ext i j
   rw [covBlock_apply, G.cover_lap_entry u v i j]
   have h_ne : ((u, i) : G.CoverV) ≠ (v, j) := by
-    intro heq; exact huv congrArg Prod.fst heq
+    intro heq; exact huv (congrArg Prod.fst heq)
   rw [if_neg h_ne]
   have hcnadj : ¬ G.coverGraph.Adj (u, i) (v, j) := by
     intro hadj'
