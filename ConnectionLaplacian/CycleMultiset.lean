@@ -77,14 +77,14 @@ private theorem complexify_mulVec_re {n : ℕ}
     (M : Matrix (Fin n) (Fin n) ℝ) (w : Fin n → ℂ) (i : Fin n) :
     (((M.map (algebraMap ℝ ℂ)) *ᵥ w) i).re =
       (M *ᵥ (fun j => (w j).re)) i := by
-  simp [Matrix.mulVec, Matrix.dotProduct, Complex.re_sum, Complex.mul_re]
+  simp [Matrix.mulVec, dotProduct, Complex.re_sum, Complex.mul_re]
 
 /-- The corresponding imaginary-part identity. -/
 private theorem complexify_mulVec_im {n : ℕ}
     (M : Matrix (Fin n) (Fin n) ℝ) (w : Fin n → ℂ) (i : Fin n) :
     (((M.map (algebraMap ℝ ℂ)) *ᵥ w) i).im =
       (M *ᵥ (fun j => (w j).im)) i := by
-  simp [Matrix.mulVec, Matrix.dotProduct, Complex.im_sum, Complex.mul_im]
+  simp [Matrix.mulVec, dotProduct, Complex.im_sum, Complex.mul_im]
 
 /-- Transport any three-term real row identity to complex vectors.
 All coefficients and vertex indices are preserved exactly. -/

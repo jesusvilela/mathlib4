@@ -158,7 +158,7 @@ lemma scalar_mulVec_row
     simp [s]
   have hsub : s ⊆ Finset.univ := Finset.subset_univ _
   -- Rewrite mulVec as dotProduct, then a sum over Finset.univ.
-  unfold Matrix.mulVec Matrix.dotProduct
+  unfold Matrix.mulVec dotProduct
   -- Show that the sum equals the sum over s.
   rw [← Finset.sum_subset hsub (f := fun j => scalarCycleLaplacian n (by omega) i j * w j)
         (by
@@ -332,7 +332,7 @@ lemma signed_mulVec_middle
   have hsu_mem : isu ∈ s := by simp [s]
   have hpr_mem : ipr ∈ s := by simp [s]
   have hsub : s ⊆ Finset.univ := Finset.subset_univ _
-  unfold Matrix.mulVec Matrix.dotProduct
+  unfold Matrix.mulVec dotProduct
   rw [← Finset.sum_subset hsub (f := fun j => signedCycleLaplacian n (by omega) i j * w j)
         (by
           intro j _ hjs
@@ -402,7 +402,7 @@ lemma signed_mulVec_zero
   have hsu_mem : i1 ∈ s := by simp [s]
   have hpr_mem : inm1 ∈ s := by simp [s]
   have hsub : s ⊆ Finset.univ := Finset.subset_univ _
-  unfold Matrix.mulVec Matrix.dotProduct
+  unfold Matrix.mulVec dotProduct
   rw [← Finset.sum_subset hsub (f := fun j => signedCycleLaplacian n (by omega) i j * w j)
         (by
           intro j _ hjs
@@ -482,7 +482,7 @@ lemma signed_mulVec_nm1
   have hsu_mem : inm2 ∈ s := by simp [s]
   have hpr_mem : i0 ∈ s := by simp [s]
   have hsub : s ⊆ Finset.univ := Finset.subset_univ _
-  unfold Matrix.mulVec Matrix.dotProduct
+  unfold Matrix.mulVec dotProduct
   rw [← Finset.sum_subset hsub (f := fun j => signedCycleLaplacian n (by omega) i j * w j)
         (by
           intro j _ hjs
