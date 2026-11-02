@@ -37,6 +37,7 @@ Mathlib standards on the newer toolchain.
 | --- | --- |
 | Every original Lean source accounted for | **Source mirrored** (36/36 SHA-equal at staging) |
 | `ConnectionLaplacian.Basic` compiles on fork toolchain | **Passed** after explicit real/matrix imports and current dot-product name; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41455484200) |
+| `ConnectionLaplacian.KernelDimension` compiles on fork toolchain | **Passed** after dimensional API and matrix-entry proof migration; [full-spine probe](https://github.com/jesusvilela/mathlib4/actions/runs/41456475394) then reached `CycleSpectrum` |
 | Complete original theorem spine compiles | **Pending** |
 | Statement-by-statement mathematical correspondence | **Pending** |
 | Transitive axiom and independent checker audit | **Pending** |
