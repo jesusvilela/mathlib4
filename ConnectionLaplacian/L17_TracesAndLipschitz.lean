@@ -45,19 +45,14 @@ variable (G : ConnGraph)
 private lemma charpoly_eval_eq_det_sub {n : Type*} [Fintype n] [DecidableEq n]
     {R : Type*} [CommRing R] (M : Matrix n n R) (α : R) :
     Polynomial.eval α M.charpoly = ((α : R) • (1 : Matrix n n R) - M).det := by
-  unfold Matrix.charpoly
-  rw [Matrix.eval_det, matPolyEquiv_charmatrix]
-  have hX : (Polynomial.eval (Matrix.scalar n α) (Polynomial.X - Polynomial.C M))
-            = Matrix.scalar n α - M := by
-    simp [Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C]
-  rw [hX]
-  congr 1
-  ext i j
-  by_cases h : i = j
-  · subst h; simp [Matrix.scalar_apply, Matrix.smul_apply, Matrix.one_apply_eq,
-                   Matrix.diagonal_apply_eq]
-  · simp [Matrix.scalar_apply, Matrix.smul_apply, Matrix.one_apply_ne h,
-          Matrix.diagonal_apply_ne _ h]
+  -- Current Mathlib already provides the characteristic-polynomial evaluation.
+  have hs : Matrix.scalar n α = α • (1 : Matrix n n R) := by
+    ext i j
+    by_cases h : i = j
+    · subst j
+      simp [Matrix.scalar_apply, Matrix.smul_apply]
+    · simp [Matrix.scalar_apply, Matrix.smul_apply, h]
+  simpa only [hs] using (Matrix.eval_charpoly M α)
 
 /-- **S1 — Shifted-det factorisation (M7 corollary).**
 `det(α • 1 − L_möb) = det(α • 1 − L_s) · det(α • 1 − L_sig)`. -/
@@ -97,10 +92,8 @@ theorem trace_laplacian_mobius :
   have hsum : (∑ p : G.V × Fin 2, (G.graph.degree p.1 : ℝ))
               = 2 * ∑ v : G.V, (G.graph.degree v : ℝ) := by
     rw [Fintype.sum_prod_type]
-    simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-               nsmul_eq_mul]
-    rw [← Finset.mul_sum]
-    norm_num
+    simp only [Fin.sum_univ_two, Finset.sum_add_distrib]
+    ring
   rw [hsum]
   have h := G.graph.sum_degrees_eq_twice_card_edges
   rw [show (∑ v, (G.graph.degree v : ℝ)) = ((∑ v, G.graph.degree v : ℕ) : ℝ) by push_cast; rfl, h]
@@ -127,10 +120,8 @@ theorem trace_laplacian_flat :
   have hsum : (∑ p : G.V × Fin 2, (G.graph.degree p.1 : ℝ))
               = 2 * ∑ v : G.V, (G.graph.degree v : ℝ) := by
     rw [Fintype.sum_prod_type]
-    simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-               nsmul_eq_mul]
-    rw [← Finset.mul_sum]
-    norm_num
+    simp only [Fin.sum_univ_two, Finset.sum_add_distrib]
+    ring
   rw [hsum]
   have h := G.graph.sum_degrees_eq_twice_card_edges
   rw [show (∑ v, (G.graph.degree v : ℝ)) = ((∑ v, G.graph.degree v : ℕ) : ℝ) by push_cast; rfl, h]
@@ -215,7 +206,7 @@ theorem frobenius_laplacian_decomposes :
       = (G.scalarLaplacianᵀ * G.scalarLaplacian).trace +
         (G.signedLaplacianMobiusᵀ * G.signedLaplacianMobius).trace := by
   have hL : (G.laplacian true).IsSymm := G.laplacian_symmetric true
-  have hs : G.scalarLaplacian.IsSymm := SimpleGraph.isSymm_lapMatrix _
+  have hs : G.scalarLaplacian.IsSymm := SimpleGraph.isSymm_lapMatrix ℝ G.graph
   have hsig : G.signedLaplacianMobius.IsSymm := G.signedLaplacianMobius_isSymm
   rw [show ((G.laplacian true)ᵀ * (G.laplacian true))
         = (G.laplacian true) * (G.laplacian true) by rw [hL]]
