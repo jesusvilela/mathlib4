@@ -1,0 +1,38 @@
+name: Full connection-Laplacian toolchain port (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - 'ConnectionLaplacian/**'
+      - 'ConnectionLaplacian.lean'
+      - 'Hardening/**'
+      - '.github/workflows/connection-laplacian-full-port.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  basic-compatibility:
+    name: Legacy Basic module on current Mathlib
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      MATHLIB_CACHE_GET_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean and fetch Mathlib build cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+      - name: Compile original connection-Laplacian foundation
+        run: lake env lean ConnectionLaplacian/Basic.lean
