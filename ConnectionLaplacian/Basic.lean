@@ -48,8 +48,8 @@ lemma σx_eigenvalues : ∃ (v_sym v_anti : Fin 2 → ℝ),
   refine ⟨![1, 1], ![1, -1], ?_, ?_, ?_, ?_⟩
   · intro h; simpa using congrArg (· 0) h
   · intro h; simpa using congrArg (· 0) h
-  · ext i; fin_cases i <;> simp [σx, Matrix.mulVec, Matrix.dotProduct, Fin.sum_univ_two]
-  · ext i; fin_cases i <;> simp [σx, Matrix.mulVec, Matrix.dotProduct, Fin.sum_univ_two]
+  · ext i; fin_cases i <;> simp [σx, Matrix.mulVec, dotProduct, Fin.sum_univ_two]
+  · ext i; fin_cases i <;> simp [σx, Matrix.mulVec, dotProduct, Fin.sum_univ_two]
 
 /-- A connection graph: a finite simple graph together with a subset of its
 edges designated as "wrap" edges. -/
