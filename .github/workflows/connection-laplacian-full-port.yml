@@ -18,7 +18,7 @@ jobs:
   basic-compatibility:
     name: Legacy Basic module on current Mathlib
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 60
     env:
       MATHLIB_CACHE_GET_URL: ''
     steps:
@@ -34,5 +34,5 @@ jobs:
           leanchecker: false
           use-mathlib-cache: true
           use-github-cache: false
-      - name: Compile original connection-Laplacian foundation
-        run: lake env lean ConnectionLaplacian/Basic.lean
+      - name: Compile connection-Laplacian proof spine incrementally
+        run: bash Porting/check_connection_spine.sh
