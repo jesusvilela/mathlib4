@@ -45,8 +45,8 @@ lemma finrank_ker_toLin'_conj
     {K : Type*} [Field K]
     {n : Type*} [Fintype n] [DecidableEq n]
     (P L : Matrix n n K) (hP : P.det ≠ 0) :
-    finrank K (LinearMap.ker (Matrix.toLin' (P * L * P⁻¹))) =
-      finrank K (LinearMap.ker (Matrix.toLin' L)) := by
+    Module.finrank K (LinearMap.ker (Matrix.toLin' (P * L * P⁻¹))) =
+      Module.finrank K (LinearMap.ker (Matrix.toLin' L)) := by
   have hPunit : IsUnit P.det := Ne.isUnit hP
   have hmul₁ : P * P⁻¹ = 1 := Matrix.mul_nonsing_inv P hPunit
   have hmul₂ : P⁻¹ * P = 1 := Matrix.nonsing_inv_mul P hPunit
@@ -74,8 +74,8 @@ lemma finrank_ker_toLin'_reindex
     {K : Type*} [Field K]
     {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
     (e : m ≃ n) (M : Matrix m m K) :
-    finrank K (LinearMap.ker (Matrix.toLin' (Matrix.reindex e e M))) =
-      finrank K (LinearMap.ker (Matrix.toLin' M)) := by
+    Module.finrank K (LinearMap.ker (Matrix.toLin' (Matrix.reindex e e M))) =
+      Module.finrank K (LinearMap.ker (Matrix.toLin' M)) := by
   rw [Matrix.toLin'_reindex]
   rw [LinearEquiv.ker_comp (LinearEquiv.funCongrLeft K K e.symm)]
   rw [LinearMap.ker_comp]
@@ -92,8 +92,8 @@ lemma finrank_ker_toLin'_fromBlocks_diag
     finrank K
         (LinearMap.ker (Matrix.toLin'
           (Matrix.fromBlocks A (0 : Matrix l m K) (0 : Matrix m l K) B))) =
-      finrank K (LinearMap.ker (Matrix.toLin' A)) +
-        finrank K (LinearMap.ker (Matrix.toLin' B)) := by
+      Module.finrank K (LinearMap.ker (Matrix.toLin' A)) +
+        Module.finrank K (LinearMap.ker (Matrix.toLin' B)) := by
   set T : Matrix (l ⊕ m) (l ⊕ m) K :=
     Matrix.fromBlocks A (0 : Matrix l m K) (0 : Matrix m l K) B with hT_def
   have hker_iff :
@@ -146,7 +146,7 @@ lemma finrank_ker_toLin'_fromBlocks_diag
       refine Prod.ext ?_ ?_
       · apply Subtype.ext; funext i; rfl
       · apply Subtype.ext; funext j; rfl }
-  rw [kerEq.finrank_eq, FiniteDimensional.finrank_prod]
+  rw [kerEq.finrank_eq, Module.finrank_prod]
 
 namespace ConnGraph
 
@@ -474,7 +474,7 @@ theorem laplacian_decomposes (mobius : Bool) :
 connected components. Closed via Mathlib's
 `SimpleGraph.card_ConnectedComponent_eq_rank_ker_lapMatrix`. -/
 theorem scalarLaplacian_kernel_dim :
-    FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) =
+    Module.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) =
       G.numComponents := by
   unfold scalarLaplacian numComponents
   exact (G.graph.card_ConnectedComponent_eq_rank_ker_lapMatrix).symm
