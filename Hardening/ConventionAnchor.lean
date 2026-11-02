@@ -57,17 +57,27 @@ example :
     (show Matrix (Fin 3) (Fin 3) ℝ from G3.scalarLaplacian) =
     !![2, -1, -1; -1, 2, -1; -1, -1, 2] := by
   classical
-  -- The graph provides a computational decidability instance. Preserve it
-  -- instead of selecting a new classical instance inside the degree formula.
+  letI : DecidableEq (Fin 3) := G3.deceq
   letI : DecidableRel G3.graph.Adj := G3.decrel
+  -- The triangle has exactly every non-loop edge. Prove the neighbor-set
+  -- equality extensionally, without evaluating an opaque subtype Fintype.
+  have hneighbors (u : Fin 3) :
+      G3.graph.neighborFinset u = Finset.univ.erase u := by
+    ext v
+    simp only [SimpleGraph.mem_neighborFinset, Finset.mem_erase,
+      Finset.mem_univ, and_true]
+    fin_cases u <;> fin_cases v <;> decide
+  have hdegree (u : Fin 3) : G3.graph.degree u = 2 := by
+    change (G3.graph.neighborFinset u).card = 2
+    rw [hneighbors u]
+    fin_cases u <;> decide
   ext u v
   refine (scalarLaplacian_entry G3 u v).trans ?_
   fin_cases u <;> fin_cases v <;>
-    simp [G3, adj3, edge3s, SimpleGraph.degree,
-      SimpleGraph.neighborFinset_eq_filter,
+    simp [hdegree, G3, adj3, edge3s,
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
       Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
-  all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
+  all_goals norm_num
 
 /-- Anchor 3/3 (block level): the connection-Laplacian building blocks.
 The wrapped edge carries the Pauli-X block, non-wrap edges the identity,
