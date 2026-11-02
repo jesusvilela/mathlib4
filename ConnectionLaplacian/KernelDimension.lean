@@ -232,7 +232,8 @@ private lemma laplacian_flat_entry (u v : G.V) (i j : Fin 2) :
     G.laplacian false (u, i) (v, j) =
       if i = j then G.scalarLaplacian u v else 0 := by
   show (G.laplacianBlock false u v) i j = _
-  unfold laplacianBlock degreeBlockMatrix adjacencyMatrix edgeMatrix scalarLaplacian
+  simp only [laplacianBlock, Matrix.sub_apply]
+  unfold degreeBlockMatrix adjacencyMatrix edgeMatrix scalarLaplacian
   simp only [Bool.false_and, if_false, Matrix.sub_apply,
              SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
              SimpleGraph.adjMatrix_apply, Matrix.diagonal_apply]
@@ -266,10 +267,7 @@ private lemma laplacian_mobius_rotated_entry (u v : G.V) (i j : Fin 2) :
     subst huv
     have hna : ¬ G.graph.Adj u u := SimpleGraph.irrefl _
     have hlap : G.laplacianBlock true u u = (G.degree u : ℝ) • I₂ := by
-      unfold laplacianBlock degreeBlockMatrix adjacencyMatrix
-      ext k l
-      simp only [Matrix.sub_apply, if_pos rfl, dif_neg hna,
-                 Matrix.zero_apply, sub_zero, if_true]
+      simp [laplacianBlock, degreeBlockMatrix, adjacencyMatrix, hna]
     rw [hlap, Matrix.mul_smul, Matrix.smul_mul, RhatMob_I₂_RhatMob]
     simp only [Matrix.smul_apply, smul_eq_mul]
     unfold scalarLaplacian signedLaplacianMobius
@@ -286,11 +284,8 @@ private lemma laplacian_mobius_rotated_entry (u v : G.V) (i j : Fin 2) :
       by_cases hwrap : G.wrap ⟨s(u,v), (SimpleGraph.mem_edgeSet G.graph).mpr hadj⟩
       · -- wrap edge (Möbius): L_block = -σx
         have hlap : G.laplacianBlock true u v = -σx := by
-          unfold laplacianBlock degreeBlockMatrix adjacencyMatrix edgeMatrix
-          ext k l
-          simp only [Matrix.sub_apply, if_neg huv, Matrix.zero_apply,
-                     zero_sub, dif_pos hadj, true_and, if_pos hwrap,
-                     Matrix.neg_apply]
+          simp [laplacianBlock, degreeBlockMatrix, adjacencyMatrix, edgeMatrix,
+            huv, hadj, hwrap]
         rw [hlap]
         rw [show (-σx : Matrix (Fin 2) (Fin 2) ℝ) = (-1 : ℝ) • σx from by
               rw [neg_one_smul]]
@@ -305,11 +300,8 @@ private lemma laplacian_mobius_rotated_entry (u v : G.V) (i j : Fin 2) :
           simp [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
       · -- interior edge (Möbius non-wrap): L_block = -I₂
         have hlap : G.laplacianBlock true u v = -I₂ := by
-          unfold laplacianBlock degreeBlockMatrix adjacencyMatrix edgeMatrix
-          ext k l
-          simp only [Matrix.sub_apply, if_neg huv, Matrix.zero_apply,
-                     zero_sub, dif_pos hadj, true_and, if_neg hwrap,
-                     Matrix.neg_apply]
+          simp [laplacianBlock, degreeBlockMatrix, adjacencyMatrix, edgeMatrix,
+            huv, hadj, hwrap]
         rw [hlap]
         rw [show (-I₂ : Matrix (Fin 2) (Fin 2) ℝ) = (-1 : ℝ) • I₂ from by
               rw [neg_one_smul]]
@@ -324,10 +316,7 @@ private lemma laplacian_mobius_rotated_entry (u v : G.V) (i j : Fin 2) :
           simp [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
     · -- non-adjacent: L_block = 0
       have hlap : G.laplacianBlock true u v = 0 := by
-        unfold laplacianBlock degreeBlockMatrix adjacencyMatrix
-        ext k l
-        simp only [Matrix.sub_apply, if_neg huv, Matrix.zero_apply,
-                   zero_sub, dif_neg hadj, neg_zero]
+        simp [laplacianBlock, degreeBlockMatrix, adjacencyMatrix, huv, hadj]
       rw [hlap, Matrix.mul_zero, Matrix.zero_mul]
       unfold scalarLaplacian signedLaplacianMobius
       simp only [SimpleGraph.lapMatrix, SimpleGraph.degMatrix, Matrix.sub_apply,
