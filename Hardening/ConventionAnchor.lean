@@ -63,11 +63,14 @@ example :
     (show Matrix (Fin 3) (Fin 3) ℝ from G3.scalarLaplacian) =
     !![2, -1, -1; -1, 2, -1; -1, -1, 2] := by
   ext u v
+  change (G3.graph.lapMatrix ℝ) u v =
+    (!![2, -1, -1; -1, 2, -1; -1, -1, 2] : Matrix (Fin 3) (Fin 3) ℝ) u v
+  rw [SimpleGraph.lapMatrix, Matrix.sub_apply, SimpleGraph.degMatrix,
+    Matrix.diagonal_apply, SimpleGraph.adjMatrix_apply]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-      SimpleGraph.adjMatrix, G3, adj3, edge3s, SimpleGraph.degree,
-      SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
-      Matrix.of_apply, Pi.sub_apply]
+    simp [G3, adj3, edge3s, SimpleGraph.degree, SimpleGraph.neighborFinset,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
 
 /-- Anchor 3/3 (block level): the connection-Laplacian building blocks.
@@ -90,7 +93,8 @@ example (i j : Fin 2) :
 
 example (u : Fin 3) (i j : Fin 2) :
     (G3.degreeBlockMatrix u u) i j = (G3.degree u : ℝ) * I₂ i j := by
-  fin_cases i <;> fin_cases j <;>
-    simp [degreeBlockMatrix, I₂, Matrix.smul_apply]
+  change (if u = u then (G3.degree u : ℝ) • I₂ else 0) i j =
+    (G3.degree u : ℝ) * I₂ i j
+  simp only [if_pos rfl, Matrix.smul_apply, smul_eq_mul]
 
 end Hardening
