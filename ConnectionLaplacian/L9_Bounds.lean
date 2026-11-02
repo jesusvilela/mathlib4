@@ -77,29 +77,30 @@ theorem trace_signedLaplacianMobius :
 Proof: both equal component counts (L8 / L4); balanced components form
 a subset of components. -/
 theorem signed_kernel_le_scalar_kernel :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' G.signedLaplacianMobius)) ≤
-      FiniteDimensional.finrank ℝ
+      Module.finrank ℝ
         (LinearMap.ker (toLin' G.scalarLaplacian)) := by
   rw [G.signedLaplacian_kernel_dim_general, G.scalarLaplacian_kernel_dim]
   exact G.numBalancedComponents_le
 
 /-- Flat-to-Möbius kernel drop equals #components − #balanced = #unbalanced. -/
 theorem kernel_drop_eq_unbalanced :
-    FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' (G.laplacian false))) -
-      FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' (G.laplacian true))) =
+    Module.finrank ℝ (LinearMap.ker (toLin' (G.laplacian false))) -
+      Module.finrank ℝ (LinearMap.ker (toLin' (G.laplacian true))) =
     G.numComponents - G.numBalancedComponents := by
   have hbal_le : G.numBalancedComponents ≤ G.numComponents :=
     G.numBalancedComponents_le
   rw [G.connectionLaplacian_kernel_dim_general true,
       G.connectionLaplacian_kernel_dim_general false]
-  simp only [if_true, if_false]
+  change 2 * G.numComponents - (G.numComponents + G.numBalancedComponents) =
+    G.numComponents - G.numBalancedComponents
   omega
 
 /-- The kernel drop is bounded by the number of connected components. -/
 theorem kernel_drop_le_numComponents :
-    FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' (G.laplacian false))) -
-      FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' (G.laplacian true))) ≤
+    Module.finrank ℝ (LinearMap.ker (toLin' (G.laplacian false))) -
+      Module.finrank ℝ (LinearMap.ker (toLin' (G.laplacian true))) ≤
     G.numComponents := by
   rw [G.kernel_drop_eq_unbalanced]
   omega
