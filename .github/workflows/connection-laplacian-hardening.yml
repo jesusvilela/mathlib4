@@ -9,8 +9,15 @@ on:
       - 'ConnectionLaplacian/**'
       - 'ConnectionLaplacian.lean'
       - 'Porting/**'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
       - '.github/workflows/connection-laplacian-hardening.yml'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

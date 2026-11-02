@@ -73,8 +73,11 @@ example :
     fin_cases u <;> decide
   ext u v
   refine (scalarLaplacian_entry G3 u v).trans ?_
+  -- Rewrite while G3.graph is still folded: unfolding G3 first would hide
+  -- this occurrence behind its raw SimpleGraph record and defeat rewriting.
+  rw [hdegree u]
   fin_cases u <;> fin_cases v <;>
-    simp [hdegree, G3, adj3, edge3s,
+    simp [G3, adj3, edge3s,
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
       Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
   all_goals norm_num

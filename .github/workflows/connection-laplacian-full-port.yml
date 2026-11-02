@@ -7,10 +7,17 @@ on:
     paths:
       - 'ConnectionLaplacian/**'
       - 'ConnectionLaplacian.lean'
-      - 'Hardening/**'
-      - 'Porting/**'
+      - 'Porting/check_connection_spine.sh'
+      - 'Porting/audit_trust.py'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
       - '.github/workflows/connection-laplacian-full-port.yml'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
