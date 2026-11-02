@@ -216,7 +216,6 @@ private lemma Pcov_mul_Pcov :
      = (2 : ℝ) • (1 : Matrix G.CoverV G.CoverV ℝ)
   rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, RhatBool_sq,
       Matrix.kronecker_smul, Matrix.one_kronecker_one]
-  rfl
 
 private lemma Pcov_inv_eq : G.Pcov⁻¹ = (1/2 : ℝ) • G.Pcov := by
   apply Matrix.inv_eq_right_inv
@@ -263,11 +262,9 @@ private lemma coverGraph_degree_eq (u : G.V) (b : Bool) :
     simp only [f, dite_eq_left hv]
     by_cases hw : G.wrap ⟨s(u, v), (SimpleGraph.mem_edgeSet G.graph).mpr hv⟩
     · rw [ite_eq_left hw]
-      rw [G.coverAdj_iff u v b (!b)]
-      exact ⟨hv, by simp [hw]⟩
+      simp [coverAdj, hv, hw]
     · rw [ite_eq_right hw]
-      rw [G.coverAdj_iff u v b b]
-      exact ⟨hv, by simp [hw]⟩
+      simp [coverAdj, hv, hw]
   unfold SimpleGraph.degree SimpleGraph.neighborFinset SimpleGraph.neighborSet
   rw [Set.toFinset_setOf, Set.toFinset_setOf]
   symm
