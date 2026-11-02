@@ -36,6 +36,8 @@ jobs:
           leanchecker-args: Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
           use-mathlib-cache: true
           use-github-cache: true
+      - name: Lint signed-Laplacian declarations against Mathlib rules
+        run: lake exe runLinter Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
       - name: Report transitive axioms of the signed-Laplacian theorems
         shell: bash
         run: |
