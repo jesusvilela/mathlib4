@@ -97,9 +97,6 @@ lemma walkWrapCount_eq_filter_card_of_eulerian
     rw [Multiset.filter_coe, Multiset.coe_card]
     -- remaining: List.filter with Bool vs List.filter with decide (Bool = true). Same predicate.
     congr 1
-    apply List.filter_congr
-    intro e _
-    cases G.wrapEdgeBool e <;> simp
 
 /-! ### L14.2 — Forward direction: balanced ⇒ even total wrap count -/
 
