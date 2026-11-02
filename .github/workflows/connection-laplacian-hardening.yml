@@ -1,0 +1,40 @@
+name: Connection Laplacian positive hardening port (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - 'Hardening/**'
+      - 'ConnectionLaplacian/**'
+      - 'ConnectionLaplacian.lean'
+      - 'Porting/**'
+      - '.github/workflows/connection-laplacian-hardening.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hardening-positive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    env:
+      MATHLIB_CACHE_GET_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean and Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+      - name: Build trusted theorem spine and run axiom audit
+        run: bash Porting/check_connection_spine.sh
+      - name: Compile positive historical hardening artifacts
+        run: bash Porting/check_hardening_positive.sh

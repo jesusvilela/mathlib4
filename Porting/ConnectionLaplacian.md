@@ -40,16 +40,24 @@ Mathlib standards on the newer toolchain.
 | `ConnectionLaplacian.KernelDimension` compiles on fork toolchain | **Passed** after dimensional API and matrix-entry proof migration; [full-spine probe](https://github.com/jesusvilela/mathlib4/actions/runs/41456475394) then reached `CycleSpectrum` |
 | `ConnectionLaplacian.CycleSpectrum` compiles | **Passed** with explicit trigonometric identities and parity proof updates; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41456921261) |
 | `ConnectionLaplacian.L5_Cover` and `L6_Cohomology` compile | **Passed** after modern graph-relation, cover type and decidability upgrades; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41458728611) |
-| Complete original theorem spine compiles | **Pending** |
+| Complete original theorem spine compiles | **Passed:** all 17 modules and the root/audit files on the newer toolchain; [CI run 41474652642](https://github.com/jesusvilela/mathlib4/actions/runs/41474652642) |
 | Statement-by-statement mathematical correspondence | **Pending** |
-| Transitive axiom and independent checker audit | **Pending** |
-| Hardening battery and negative-test isolation | **Pending** |
+| Transitive axiom and independent checker audit | **Transitive axiom audit passed:** 25/25 declarations, only `Classical.choice`, `Quot.sound`, `propext`; additional independent rechecking pending |
+| Hardening battery and negative-test isolation | **Under verification:** separately compiled positive proof aliases and finite convention batteries; historical comparator negative controls remain out of the trusted spine |
 | Community review and upstream acceptance | **Pending** |
 
-A [dependency-ordered compilation script](check_connection_spine.sh) now tries the
-full 19-file theorem spine, with cached `.olean` outputs between modules.
-The verified `Basic` build is a compiler result, not a transitive-axiom or
-statement-correspondence audit for the old formalization.
+The [dependency-aware compilation script](check_connection_spine.sh) now
+compiles the full 19-file theorem spine (17 modules, root and axiom audit)
+with cached `.olean` outputs. The [verified run](https://github.com/jesusvilela/mathlib4/actions/runs/41474652642)
+established **25/25 standard-axiom-only declarations**, not an independent
+comparator replay. Every original Lean theorem file remains accounted for;
+a complete *statement-by-statement correspondence* review is still open.
+
+The standalone [positive hardening probe](check_hardening_positive.sh) now
+separately tests solution aliases and bounded convention examples. Legacy
+challenge files intentionally contain `sorry` and MUST NOT be promoted as
+proved results merely because they elaborate. New-toolchain comparator,
+nanoda, and negative-control replay remains an independent gate.
 Preserve the original names and statements unless each change is
 mathematically justified and documented. Do not erase the historically
 corrected general-graph balance invariant: total negative-edge parity is
