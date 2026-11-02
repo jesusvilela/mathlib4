@@ -76,7 +76,9 @@ private lemma wrap_decide_pred {u v : G.V} (h : G.graph.Adj u v) :
   -- Goal: decide ((c + if b = true then 1 else 0) % 2 = 1) = xor b (decide (c % 2 = 1))
   cases b with
   | false =>
-      simp only [if_false, Nat.add_zero, Bool.false_xor]
+      -- Reducing the closed Boolean label is enough: this edge adds no wrap.
+      change decide (c % 2 = 1) = decide (c % 2 = 1)
+      rfl
   | true =>
       simp only [if_true, Bool.true_xor]
       by_cases hc : c % 2 = 1
@@ -277,7 +279,7 @@ lemma candidateLift_ne_of_isTree (hT : G.graph.IsTree) (v₀ : G.V) :
   have hnil :
       G.walkWrapParity (q.map G.coverProj) =
       G.walkWrapParity (SimpleGraph.Walk.nil : G.graph.Walk v₀ v₀) :=
-    G.walkWrapParity_acyclic_endpoints hT.IsAcyclic _ _
+    G.walkWrapParity_acyclic_endpoints hT.isAcyclic _ _
   rw [walkWrapParity_nil] at hnil
   rw [hnil] at hparq
   exact Bool.noConfusion hparq
@@ -300,7 +302,7 @@ theorem tree_isBalanced_of_isTree
 theorem numComponents_of_isTree (hT : G.graph.IsTree) :
     G.numComponents = 1 := by
   unfold numComponents
-  have hconn : G.graph.Connected := hT.isConnected
+  have hconn : G.graph.Connected := hT.connected
   haveI : Subsingleton G.graph.ConnectedComponent :=
     hconn.preconnected.subsingleton_connectedComponent
   obtain ⟨v⟩ := hconn.nonempty
@@ -326,7 +328,7 @@ theorem numBalancedComponents_of_isTree (hT : G.graph.IsTree) :
       right_inv := fun _ => rfl
     }
   rw [heq]
-  have hconn : G.graph.Connected := hT.isConnected
+  have hconn : G.graph.Connected := hT.connected
   haveI : Subsingleton G.graph.ConnectedComponent :=
     hconn.preconnected.subsingleton_connectedComponent
   obtain ⟨v⟩ := hconn.nonempty
