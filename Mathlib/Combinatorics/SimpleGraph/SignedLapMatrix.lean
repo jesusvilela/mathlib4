@@ -51,13 +51,15 @@ theorem signedAdjMatrix_apply_of_adj (wrap : G.EdgeLabeling Bool) (u v : V)
 @[simp]
 theorem signedAdjMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedAdjMatrix wrap v v = 0 := by
-  simp [signedAdjMatrix_apply, G.irrefl]
+  have h : ¬ G.Adj v v := G.irrefl
+  simp [signedAdjMatrix_apply, h]
 
 /-- The diagonal of the signed graph Laplacian is the vertex degree. -/
 @[simp]
 theorem signedLapMatrix_apply_self (wrap : G.EdgeLabeling Bool) (v : V) :
     G.signedLapMatrix wrap v v = (G.degree v : ℝ) := by
-  simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply, G.irrefl]
+  have h : ¬ G.Adj v v := G.irrefl
+  simp [signedLapMatrix, degMatrix, signedAdjMatrix_apply, h]
 
 /-- Signed adjacency matrices are symmetric because the labels belong to unoriented edges. -/
 theorem isSymm_signedAdjMatrix (wrap : G.EdgeLabeling Bool) :
