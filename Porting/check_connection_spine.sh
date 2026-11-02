@@ -28,5 +28,9 @@ for name in "${modules[@]}"; do
   echo "::endgroup::"
 done
 lake env lean -o .lake/build/lib/lean/ConnectionLaplacian.olean ConnectionLaplacian.lean
-lake env lean ConnectionLaplacian/AxiomAudit.lean
+# Source trust boundary; no sorry, admit, native_decide or project-local axioms.
+python3 Porting/audit_trust.py --root .
+# Each requested declaration must appear, with only standard transitive axioms.
+lake env lean ConnectionLaplacian/AxiomAudit.lean | tee /tmp/connection-laplacian-axiom-audit.log
+python3 Porting/audit_trust.py --root . --axiom-output /tmp/connection-laplacian-axiom-audit.log
 echo "PASS: all 19 theorem-spine source files compiled; review axioms separately."

@@ -8,6 +8,7 @@ on:
       - 'ConnectionLaplacian/**'
       - 'ConnectionLaplacian.lean'
       - 'Hardening/**'
+      - 'Porting/**'
       - '.github/workflows/connection-laplacian-full-port.yml'
   workflow_dispatch:
 
