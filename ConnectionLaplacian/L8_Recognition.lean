@@ -50,12 +50,12 @@ L5.scalarLap_cover_splits the kernel also equals
 `ker(scalarLap G) + ker(signedLap G)`; combining with L6.numComponents_cover
 and L4.scalarLaplacian_kernel_dim yields the result. -/
 theorem signedLaplacian_kernel_dim_general :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' G.signedLaplacianMobius)) =
       G.numBalancedComponents := by
   -- Mathlib: ker(scalarLap G̃) has dim = #π₀(G̃)
   have h1 :
-      FiniteDimensional.finrank ℝ
+      Module.finrank ℝ
           (LinearMap.ker (toLin' G.orientationDoubleCover.scalarLaplacian)) =
         G.orientationDoubleCover.numComponents :=
     G.orientationDoubleCover.scalarLaplacian_kernel_dim
@@ -84,22 +84,22 @@ linear-equiv from `P`), `Matrix.reindex` kernel-dim preservation (via
 `Matrix.rank_reindex` + rank-nullity), and the block-diagonal kernel
 decomposition `ker(fromBlocks A 0 0 B) ≃ ker A × ker B`. -/
 theorem laplacian_kernel_dim_decomposes (mobius : Bool) :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian mobius))) =
-      FiniteDimensional.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) +
-      FiniteDimensional.finrank ℝ
+      Module.finrank ℝ (LinearMap.ker (toLin' G.scalarLaplacian)) +
+      Module.finrank ℝ
           (LinearMap.ker (toLin'
               (if mobius then G.signedLaplacianMobius else G.scalarLaplacian))) := by
   obtain ⟨P, hPdet, hreindex⟩ := G.laplacian_decomposes mobius
   have hsim :
-      finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.laplacian mobius * P⁻¹))) =
-      finrank ℝ (LinearMap.ker (Matrix.toLin' (G.laplacian mobius))) :=
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.laplacian mobius * P⁻¹))) =
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' (G.laplacian mobius))) :=
     finrank_ker_toLin'_conj P (G.laplacian mobius) hPdet
   have hreidx :
-      finrank ℝ (LinearMap.ker (Matrix.toLin'
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin'
         (Matrix.reindex G.prodFinTwoEquivSum G.prodFinTwoEquivSum
           (P * G.laplacian mobius * P⁻¹)))) =
-      finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.laplacian mobius * P⁻¹))) :=
+      Module.finrank ℝ (LinearMap.ker (Matrix.toLin' (P * G.laplacian mobius * P⁻¹))) :=
     finrank_ker_toLin'_reindex G.prodFinTwoEquivSum _
   rw [hreindex] at hreidx
   have hsplit :=
@@ -117,7 +117,7 @@ Z/2 connection Laplacian's kernel dimension:
 The old formula `2·numComponents − numOddWrapComponents` is recovered
 on cycle graphs via the L6 cycle bridge lemma. -/
 theorem connectionLaplacian_kernel_dim_general (mobius : Bool) :
-    FiniteDimensional.finrank ℝ
+    Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian mobius))) =
       (if mobius then G.numComponents + G.numBalancedComponents
                  else 2 * G.numComponents) := by
@@ -139,9 +139,9 @@ theorem connectionLaplacian_kernel_dim_general (mobius : Bool) :
 smaller kernel than the flat bundle iff at least one component is
 unbalanced (has non-trivial wrap class in `H¹`). -/
 theorem mobius_kernel_strict_iff_general :
-    (FiniteDimensional.finrank ℝ
+    (Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian true))) <
-     FiniteDimensional.finrank ℝ
+     Module.finrank ℝ
         (LinearMap.ker (toLin' (G.laplacian false)))) ↔
     G.numBalancedComponents < G.numComponents := by
   have _hle : G.numBalancedComponents ≤ G.numComponents :=
