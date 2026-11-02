@@ -292,11 +292,11 @@ theorem scalarCycle_eigenvalue (n : ℕ) (hn : 3 ≤ n) (k : Fin n) :
   -- sum-to-product: cos(θ(i+1)) + cos(θ(i-1)) = 2 cos(θ i) cos(θ)
   have hsum : Real.cos (θ * ((i.val : ℝ) + 1)) + Real.cos (θ * ((i.val : ℝ) - 1))
       = 2 * Real.cos (θ * (i.val : ℝ)) * Real.cos θ := by
-    have hcos_add := Real.cos_add_cos (θ * ((i.val : ℝ) + 1)) (θ * ((i.val : ℝ) - 1))
-    rw [hcos_add]
-    congr 1
-    · congr 1; ring
-    · congr 1; ring
+    rw [Real.cos_add_cos]
+    have hmid : (θ * ((i.val : ℝ) + 1) + θ * ((i.val : ℝ) - 1)) / 2 =
+        θ * (i.val : ℝ) := by ring
+    have hshift : (θ * ((i.val : ℝ) + 1) - θ * ((i.val : ℝ) - 1)) / 2 = θ := by ring
+    rw [hmid, hshift]
   -- Rewrite the cos θ on the target side.
   have hθ_cos : Real.cos θ = Real.cos (2 * π * (k.val : ℝ) / (n : ℝ)) := by rw [hθ_def]
   have hvi : v i = Real.cos (θ * (i.val : ℝ)) := rfl
@@ -645,9 +645,10 @@ theorem signedCycle_eigenvalue (n : ℕ) (hn : 3 ≤ n) (k : Fin n) :
       have hsum : Real.cos (φ * ((i.val : ℝ) + 1)) + Real.cos (φ * ((i.val : ℝ) - 1))
           = 2 * Real.cos (φ * (i.val : ℝ)) * Real.cos φ := by
         rw [Real.cos_add_cos]
-        congr 1
-        · congr 1; ring
-        · congr 1; ring
+        have hmid : (φ * ((i.val : ℝ) + 1) + φ * ((i.val : ℝ) - 1)) / 2 =
+            φ * (i.val : ℝ) := by ring
+        have hshift : (φ * ((i.val : ℝ) + 1) - φ * ((i.val : ℝ) - 1)) / 2 = φ := by ring
+        rw [hmid, hshift]
       have hvi : v i = Real.cos (φ * (i.val : ℝ)) := rfl
       rw [show (2 * v i - Real.cos (φ * ((i.val : ℝ) + 1)) -
             Real.cos (φ * ((i.val : ℝ) - 1))) =
@@ -695,7 +696,11 @@ theorem mobius_more_eigenvalues (n : ℕ) (hn : 4 ≤ n) :
     · have hm' : π * (2 * (k.val : ℝ)) = π * (2 * m * n + 1) := by
         have := hm
         field_simp at this
-        linarith
+        calc
+          π * (2 * (k.val : ℝ)) =
+              π * (2 * (n : ℝ) * (m : ℝ) + 1) :=
+            congrArg (fun z : ℝ => π * z) this
+          _ = π * (2 * m * n + 1) := by ring
       have hnum : 2 * (k.val : ℝ) = 2 * m * n + 1 := mul_left_cancel₀ hπ_ne hm'
       have hZraw : (2 * k.val : ℤ) = 2 * m * n + 1 := by exact_mod_cast hnum
       have hpar : ∃ p : ℤ, (2 * k.val : ℤ) = 2 * p + 1 :=
@@ -705,7 +710,11 @@ theorem mobius_more_eigenvalues (n : ℕ) (hn : 4 ≤ n) :
     · have hm' : π * (2 * (k.val : ℝ)) = π * (2 * m * n - 1) := by
         have := hm
         field_simp at this
-        linarith
+        calc
+          π * (2 * (k.val : ℝ)) =
+              π * (2 * (n : ℝ) * (m : ℝ) - 1) :=
+            congrArg (fun z : ℝ => π * z) this
+          _ = π * (2 * m * n - 1) := by ring
       have hnum : 2 * (k.val : ℝ) = 2 * m * n - 1 := mul_left_cancel₀ hπ_ne hm'
       have hZraw : (2 * k.val : ℤ) = 2 * m * n - 1 := by exact_mod_cast hnum
       have hpar : ∃ p : ℤ, (2 * k.val : ℤ) = 2 * p - 1 :=
