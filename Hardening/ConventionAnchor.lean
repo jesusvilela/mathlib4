@@ -62,6 +62,7 @@ example :
 example :
     (show Matrix (Fin 3) (Fin 3) ℝ from G3.scalarLaplacian) =
     !![2, -1, -1; -1, 2, -1; -1, -1, 2] := by
+  classical
   ext u v
   -- Expand matrix entries definitionally before simplifying the finite graph.
   -- This avoids an unstable rewrite under Matrix's pointwise subtraction API.
