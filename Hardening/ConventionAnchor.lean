@@ -1,17 +1,11 @@
 /-
 Convention anchoring battery (prototype).
 -/
-import ConnectionLaplacian
+import Hardening.BatteryPrelude
 
 namespace Hardening
 
 open ConnectionLaplacian ConnGraph Matrix BigOperators
-
-/-- Bridge lemma: lift a `decide`-provable card over a finite type to ℝ. -/
-theorem card_filter_univ_cast {α : Type*} [Fintype α] [DecidableEq α]
-    (p : α → Prop) [DecidablePred p] (k : ℕ)
-    (h : (Finset.filter p Finset.univ).card = k) :
-    ((Finset.filter p Finset.univ).card : ℝ) = k := by rw [h]
 
 /-- Row index flattening (u, i) ↦ 2*u + i used by the connection anchor. -/
 def flatIdx {n : ℕ} (p : Fin n × Fin 2) : Fin (2 * n) :=
@@ -64,14 +58,9 @@ example :
     !![2, -1, -1; -1, 2, -1; -1, -1, 2] := by
   classical
   ext u v
-  -- Expand matrix entries definitionally before simplifying the finite graph.
-  -- This avoids an unstable rewrite under Matrix's pointwise subtraction API.
-  change
-    (if u = v then ((G3.graph.neighborFinset u).card : ℝ) else 0) -
-      (if G3.graph.Adj u v then (1 : ℝ) else 0) =
-      (!![2, -1, -1; -1, 2, -1; -1, -1, 2] : Matrix (Fin 3) (Fin 3) ℝ) u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [G3, adj3, edge3s, SimpleGraph.neighborFinset,
+    simp [G3, adj3, edge3s, SimpleGraph.degree, SimpleGraph.neighborFinset,
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
       Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num

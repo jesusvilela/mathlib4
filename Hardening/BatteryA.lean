@@ -45,10 +45,11 @@ example : (show Matrix (Fin 2) (Fin 2) ℝ from G_B1.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 2) (Fin 2) ℝ from G_B1.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 2) => if u = 0 then if v = 0 then (0 : ℝ) else (0 : ℝ) else if v = 0 then (0 : ℝ) else (0 : ℝ) : Matrix (Fin 2) (Fin 2) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B1, A_B1, E_B1, SimpleGraph.degree,
+    simp [G_B1, A_B1, E_B1, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -89,10 +90,11 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B5.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B5.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 3) => if u = 0 then if v = 0 then (1 : ℝ) else if v = 1 then (-1 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (1 : ℝ) else (0 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else (0 : ℝ) : Matrix (Fin 3) (Fin 3) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B5, A_B5, E_B5, SimpleGraph.degree,
+    simp [G_B5, A_B5, E_B5, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -133,10 +135,11 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B9.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B9.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 3) => if u = 0 then if v = 0 then (1 : ℝ) else if v = 1 then (-1 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else (1 : ℝ) : Matrix (Fin 3) (Fin 3) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B9, A_B9, E_B9, SimpleGraph.degree,
+    simp [G_B9, A_B9, E_B9, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -177,10 +180,11 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B13.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B13.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 3) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 3) (Fin 3) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B13, A_B13, E_B13, SimpleGraph.degree,
+    simp [G_B13, A_B13, E_B13, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -221,10 +225,11 @@ example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B17.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 3) (Fin 3) ℝ from G_B17.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 3) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 3) (Fin 3) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B17, A_B17, E_B17, SimpleGraph.degree,
+    simp [G_B17, A_B17, E_B17, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -265,10 +270,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B21.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B21.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (1 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B21, A_B21, E_B21, SimpleGraph.degree,
+    simp [G_B21, A_B21, E_B21, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -309,10 +315,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B25.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B25.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (1 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B25, A_B25, E_B25, SimpleGraph.degree,
+    simp [G_B25, A_B25, E_B25, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -353,10 +360,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B29.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B29.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (1 : ℝ) else if v = 2 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (1 : ℝ) else (0 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else (1 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B29, A_B29, E_B29, SimpleGraph.degree,
+    simp [G_B29, A_B29, E_B29, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -397,10 +405,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B33.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B33.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (1 : ℝ) else if v = 2 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (1 : ℝ) else (0 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else (1 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B33, A_B33, E_B33, SimpleGraph.degree,
+    simp [G_B33, A_B33, E_B33, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -441,10 +450,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B37.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B37.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B37, A_B37, E_B37, SimpleGraph.degree,
+    simp [G_B37, A_B37, E_B37, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -485,10 +495,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B41.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B41.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B41, A_B41, E_B41, SimpleGraph.degree,
+    simp [G_B41, A_B41, E_B41, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -529,10 +540,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B45.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B45.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (3 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B45, A_B45, E_B45, SimpleGraph.degree,
+    simp [G_B45, A_B45, E_B45, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -573,10 +585,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B49.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B49.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (3 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else (2 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B49, A_B49, E_B49, SimpleGraph.degree,
+    simp [G_B49, A_B49, E_B49, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -617,10 +630,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B53.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B53.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (3 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (3 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (3 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B53, A_B53, E_B53, SimpleGraph.degree,
+    simp [G_B53, A_B53, E_B53, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -661,10 +675,11 @@ example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B57.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 4) (Fin 4) ℝ from G_B57.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 4) => if u = 0 then if v = 0 then (3 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (3 : ℝ) else if v = 2 then (-1 : ℝ) else (-1 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (3 : ℝ) else (-1 : ℝ) else if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else (3 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B57, A_B57, E_B57, SimpleGraph.degree,
+    simp [G_B57, A_B57, E_B57, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -705,10 +720,11 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B61.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B61.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 5) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 3 then if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (1 : ℝ) else (-1 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (-1 : ℝ) else (1 : ℝ) : Matrix (Fin 5) (Fin 5) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B61, A_B61, E_B61, SimpleGraph.degree,
+    simp [G_B61, A_B61, E_B61, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -749,10 +765,11 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B65.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B65.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 5) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (-1 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 3 then if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (1 : ℝ) else (-1 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (-1 : ℝ) else (1 : ℝ) : Matrix (Fin 5) (Fin 5) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B65, A_B65, E_B65, SimpleGraph.degree,
+    simp [G_B65, A_B65, E_B65, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -793,10 +810,11 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B69.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B69.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 5) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (-1 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else if v = 3 then (-1 : ℝ) else (0 : ℝ) else if u = 3 then if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (2 : ℝ) else (0 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) : Matrix (Fin 5) (Fin 5) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B69, A_B69, E_B69, SimpleGraph.degree,
+    simp [G_B69, A_B69, E_B69, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
@@ -837,10 +855,11 @@ example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B73.signedLaplacianMobius) =
 
 example : (show Matrix (Fin 5) (Fin 5) ℝ from G_B73.scalarLaplacian) =
     (Matrix.of fun (u v : Fin 5) => if u = 0 then if v = 0 then (2 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (-1 : ℝ) else (0 : ℝ) else if u = 1 then if v = 0 then (-1 : ℝ) else if v = 1 then (2 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) else if u = 2 then if v = 0 then (0 : ℝ) else if v = 1 then (-1 : ℝ) else if v = 2 then (2 : ℝ) else if v = 3 then (-1 : ℝ) else (0 : ℝ) else if u = 3 then if v = 0 then (-1 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (-1 : ℝ) else if v = 3 then (2 : ℝ) else (0 : ℝ) else if v = 0 then (0 : ℝ) else if v = 1 then (0 : ℝ) else if v = 2 then (0 : ℝ) else if v = 3 then (0 : ℝ) else (0 : ℝ) : Matrix (Fin 5) (Fin 5) ℝ) := by
+  classical
   ext u v
+  rw [scalarLaplacian_entry]
   fin_cases u <;> fin_cases v <;>
-    simp [scalarLaplacian, SimpleGraph.lapMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.adjMatrix, G_B73, A_B73, E_B73, SimpleGraph.degree,
+    simp [G_B73, A_B73, E_B73, SimpleGraph.degree,
           SimpleGraph.neighborFinset, Matrix.sub_apply, Matrix.diagonal,
           Matrix.of_apply, Pi.sub_apply, Matrix.cons_val_zero,
           Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,

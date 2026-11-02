@@ -16,4 +16,12 @@ theorem card_filter_univ_cast {α : Type*} [Fintype α] [DecidableEq α]
     (h : (Finset.filter p Finset.univ).card = k) :
     ((Finset.filter p Finset.univ).card : ℝ) = k := by rw [h]
 
+/-- Entrywise equation for the ordinary Laplacian of a finite connection graph.
+This isolates the matrix API from the generated numeric convention fixtures. -/
+theorem scalarLaplacian_entry (G : ConnGraph) (u v : G.V) :
+    G.scalarLaplacian u v =
+      (if u = v then (G.graph.degree u : ℝ) else 0) -
+        (if G.graph.Adj u v then (1 : ℝ) else 0) := by
+  rfl
+
 end Hardening
