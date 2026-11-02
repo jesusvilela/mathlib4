@@ -20,11 +20,13 @@ def G_B2 : ConnGraph where
   graph :=
     { Adj := A_B2
       symm := by
+        constructor
         intro u v h
         simp [A_B2, E_B2, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B2, E_B2, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -61,11 +63,13 @@ def G_B6 : ConnGraph where
   graph :=
     { Adj := A_B6
       symm := by
+        constructor
         intro u v h
         simp [A_B6, E_B6, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B6, E_B6, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -102,11 +106,13 @@ def G_B10 : ConnGraph where
   graph :=
     { Adj := A_B10
       symm := by
+        constructor
         intro u v h
         simp [A_B10, E_B10, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B10, E_B10, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -143,11 +149,13 @@ def G_B14 : ConnGraph where
   graph :=
     { Adj := A_B14
       symm := by
+        constructor
         intro u v h
         simp [A_B14, E_B14, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B14, E_B14, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -184,11 +192,13 @@ def G_B18 : ConnGraph where
   graph :=
     { Adj := A_B18
       symm := by
+        constructor
         intro u v h
         simp [A_B18, E_B18, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B18, E_B18, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -225,11 +235,13 @@ def G_B22 : ConnGraph where
   graph :=
     { Adj := A_B22
       symm := by
+        constructor
         intro u v h
         simp [A_B22, E_B22, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B22, E_B22, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -266,11 +278,13 @@ def G_B26 : ConnGraph where
   graph :=
     { Adj := A_B26
       symm := by
+        constructor
         intro u v h
         simp [A_B26, E_B26, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B26, E_B26, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -307,11 +321,13 @@ def G_B30 : ConnGraph where
   graph :=
     { Adj := A_B30
       symm := by
+        constructor
         intro u v h
         simp [A_B30, E_B30, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B30, E_B30, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -348,11 +364,13 @@ def G_B34 : ConnGraph where
   graph :=
     { Adj := A_B34
       symm := by
+        constructor
         intro u v h
         simp [A_B34, E_B34, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B34, E_B34, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -389,11 +407,13 @@ def G_B38 : ConnGraph where
   graph :=
     { Adj := A_B38
       symm := by
+        constructor
         intro u v h
         simp [A_B38, E_B38, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B38, E_B38, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -430,11 +450,13 @@ def G_B42 : ConnGraph where
   graph :=
     { Adj := A_B42
       symm := by
+        constructor
         intro u v h
         simp [A_B42, E_B42, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B42, E_B42, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -471,11 +493,13 @@ def G_B46 : ConnGraph where
   graph :=
     { Adj := A_B46
       symm := by
+        constructor
         intro u v h
         simp [A_B46, E_B46, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B46, E_B46, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -512,11 +536,13 @@ def G_B50 : ConnGraph where
   graph :=
     { Adj := A_B50
       symm := by
+        constructor
         intro u v h
         simp [A_B50, E_B50, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B50, E_B50, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -553,11 +579,13 @@ def G_B54 : ConnGraph where
   graph :=
     { Adj := A_B54
       symm := by
+        constructor
         intro u v h
         simp [A_B54, E_B54, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B54, E_B54, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -594,11 +622,13 @@ def G_B58 : ConnGraph where
   graph :=
     { Adj := A_B58
       symm := by
+        constructor
         intro u v h
         simp [A_B58, E_B58, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B58, E_B58, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -635,11 +665,13 @@ def G_B62 : ConnGraph where
   graph :=
     { Adj := A_B62
       symm := by
+        constructor
         intro u v h
         simp [A_B62, E_B62, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B62, E_B62, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -676,11 +708,13 @@ def G_B66 : ConnGraph where
   graph :=
     { Adj := A_B66
       symm := by
+        constructor
         intro u v h
         simp [A_B66, E_B66, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B66, E_B66, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -717,11 +751,13 @@ def G_B70 : ConnGraph where
   graph :=
     { Adj := A_B70
       symm := by
+        constructor
         intro u v h
         simp [A_B70, E_B70, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B70, E_B70, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
@@ -758,11 +794,13 @@ def G_B74 : ConnGraph where
   graph :=
     { Adj := A_B74
       symm := by
+        constructor
         intro u v h
         simp [A_B74, E_B74, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq] at h ⊢
         <;> omega
       loopless := by
+        constructor
         intro u
         simp [A_B74, E_B74, Finset.mem_insert, Finset.mem_singleton,
             Prod.mk.injEq]
