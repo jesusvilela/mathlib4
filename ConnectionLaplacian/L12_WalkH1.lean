@@ -219,10 +219,12 @@ private lemma walkWrapCount_xor_of_balance {v₀ : G.V} (ε : G.V → Bool)
           cases hv : G.wrapEdgeBool s(u, x)
           · rfl
           · exact absurd hv hw
-        simp only [hwb_false, if_false, natParity_zero]
         have hux_xor : xor (ε u) (ε x) = false := by
           rw [heq, Bool.xor_self]
         rw [hux_xor]
+        -- Make the false-edge count reduction explicit.
+        have hzero : (if (false : Bool) = true then (1 : ℕ) else 0) = 0 := by decide
+        simp only [hwb_false, hzero, natParity_zero, Bool.false_xor]
 
 private lemma closedWalk_wrapCount_even_of_balanced
     {C : G.graph.ConnectedComponent}
