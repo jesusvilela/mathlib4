@@ -57,20 +57,17 @@ example :
     (show Matrix (Fin 3) (Fin 3) ℝ from G3.scalarLaplacian) =
     !![2, -1, -1; -1, 2, -1; -1, -1, 2] := by
   classical
+  -- The graph provides a computational decidability instance. Preserve it
+  -- instead of selecting a new classical instance inside the degree formula.
+  letI : DecidableRel G3.graph.Adj := G3.decrel
   ext u v
-  -- Keep the entry lemma as an explicit equality instead of rewriting a
-  -- dependent matrix coercion.  In particular, the matrix type is retained.
-  calc
-    G3.scalarLaplacian u v =
-        (if u = v then (G3.graph.degree u : ℝ) else 0) -
-          (if G3.graph.Adj u v then (1 : ℝ) else 0) :=
-      scalarLaplacian_entry G3 u v
-    _ = (!![2, -1, -1; -1, 2, -1; -1, -1, 2] : Matrix (Fin 3) (Fin 3) ℝ) u v := by
-      fin_cases u <;> fin_cases v <;>
-        simp [G3, adj3, edge3s, SimpleGraph.degree, SimpleGraph.neighborFinset,
-          Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
-          Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
-      all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
+  refine (scalarLaplacian_entry G3 u v).trans ?_
+  fin_cases u <;> fin_cases v <;>
+    simp [G3, adj3, edge3s, SimpleGraph.degree,
+      SimpleGraph.neighborFinset_eq_filter,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
+  all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
 
 /-- Anchor 3/3 (block level): the connection-Laplacian building blocks.
 The wrapped edge carries the Pauli-X block, non-wrap edges the identity,
