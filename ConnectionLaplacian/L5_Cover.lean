@@ -43,7 +43,7 @@ variable (G : ConnGraph)
 
 /-- Vertex set of the orientation double cover: two sheets over each
 vertex of `G`, indexed by `Bool`. -/
-def CoverV : Type _ := G.V × Bool
+abbrev CoverV : Type _ := G.V × Bool
 
 noncomputable instance : Fintype G.CoverV := by
   unfold CoverV; infer_instance
