@@ -41,9 +41,9 @@ Mathlib standards on the newer toolchain.
 | `ConnectionLaplacian.CycleSpectrum` compiles | **Passed** with explicit trigonometric identities and parity proof updates; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41456921261) |
 | `ConnectionLaplacian.L5_Cover` and `L6_Cohomology` compile | **Passed** after modern graph-relation, cover type and decidability upgrades; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41458728611) |
 | Complete original theorem spine compiles | **Passed:** all 17 modules and the root/audit files on the newer toolchain; [CI run 41474652642](https://github.com/jesusvilela/mathlib4/actions/runs/41474652642) |
-| Statement-by-statement mathematical correspondence | **Pending** |
+| Statement-by-statement mathematical correspondence | **Textual audit complete:** 189 theorem/lemma headers match the pinned source after the documented `finrank` spelling normalization; 56 definition/structure headers have one API adaptation (`CoverV`: `def` → `abbrev`). Elaborated-type and definitional-equivalence checks remain open. |
 | Transitive axiom and independent checker audit | **Transitive axiom audit passed:** 25/25 declarations, only `Classical.choice`, `Quot.sound`, `propext`; additional independent rechecking pending |
-| Hardening battery and negative-test isolation | **Under verification:** separately compiled positive proof aliases and finite convention batteries; historical comparator negative controls remain out of the trusted spine |
+| Hardening battery and negative-test isolation | **Positive Lean suite PASSED:** all ten selected modules, all four shards (74 total graph cases) and the independent 74-case monolith; [CI run 41593486656](https://github.com/jesusvilela/mathlib4/actions/runs/41593486656). Intentionally failing negative controls remain isolated; independent comparator replay remains open. |
 | Community review and upstream acceptance | **Pending** |
 
 The [dependency-aware compilation script](check_connection_spine.sh) now
@@ -51,7 +51,7 @@ compiles the full 19-file theorem spine (17 modules, root and axiom audit)
 with cached `.olean` outputs. The [verified run](https://github.com/jesusvilela/mathlib4/actions/runs/41474652642)
 established **25/25 standard-axiom-only declarations**, not an independent
 comparator replay. Every original Lean theorem file remains accounted for;
-a complete *statement-by-statement correspondence* review is still open.
+a textual audit matched 189 theorem/lemma headers; independent elaborated-type correspondence and definition-body equivalence are still open.
 
 The standalone [positive hardening probe](check_hardening_positive.sh) now
 separately tests solution aliases and bounded convention examples. Legacy
@@ -63,3 +63,33 @@ mathematically justified and documented. Do not erase the historically
 corrected general-graph balance invariant: total negative-edge parity is
 **not** equivalent to component balance. Nor should a conditional cycle
 matrix-reindexing theorem be promoted to an unconditional statement.
+
+## 2026-11-03: positive hardening migration passed
+
+At commit `a4405860161c2b080451c4026727b8fbd15f1876`, the fork-only
+[positive hardening workflow](https://github.com/jesusvilela/mathlib4/actions/runs/41593486656)
+passed the full theorem-spine and standard-axiom audit, then compiled **all ten**
+selected hardening modules: Compat, Solution, CycleSolution, BatteryPrelude,
+ConventionAnchor, BatteryA, BatteryB, BatteryC, BatteryD, and ConventionBattery.
+The four shards cover **74 graph cases** (19 + 19 + 18 + 18); the 74-case
+monolith independently compiles the corresponding statements. A source
+comparison found the original edge/wrap sets and the 148 literal expected
+signed/ordinary matrix values unchanged. Successful Lean compilation is
+an evidence claim about the encoded statements, not a third-party review.
+
+## Comparator portability: distinct evidence gate
+
+The comparator challenge and solution files and all four intentionally
+negative fixtures are source-pinned to
+`jesusvilela/connection_laplacian_lean@0b4ad40a7dd26d924bd44096eaa5291c3882a67b`.
+The historical comparator JSON configurations and source checker are
+preserved byte-for-byte; see `comparator_source_hashes.json` and
+`audit_comparator_port.py`. The dedicated comparator-static workflow
+checks provenance, coverage, positive/negative configuration and absence
+of untrusted imports into the production Lean spine.
+
+**That workflow is static.** It does not build or run comparator, nanoda,
+lean4export, or sandboxed dual-kernel checks. The historical toolchain-specific
+replay remains a separate open gate: two positive suites (seven graph targets,
+five cycle targets) plus four expected rejections, with independent kernel
+and sandbox evidence. Never call a static configuration check a comparator replay.

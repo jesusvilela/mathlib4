@@ -1,0 +1,24 @@
+{
+  "source_repository": "jesusvilela/connection_laplacian_lean",
+  "source_commit": "0b4ad40a7dd26d924bd44096eaa5291c3882a67b",
+  "scope": "Pinned comparator challenge/solution/configuration bytes only. This is not evidence of comparator execution.",
+  "git_blob_sha1": {
+    "Hardening/Challenge.lean": "c21282ee1953b6d21fd7aab59219b8cf666f0da3",
+    "Hardening/Solution.lean": "c7380f5e4017ab7047778d951862558eb5adf45d",
+    "Hardening/CycleChallenge.lean": "95a49d42479d7bcc2839cfb936cebb6ca8130abe",
+    "Hardening/CycleSolution.lean": "81b442cb103271237d0af07253133a6259af9cc2",
+    "Hardening/Negative/BadChallenge.lean": "13016a6e15d132730188f2b1a6f1c8599fbd59de",
+    "Hardening/Negative/BadSolution.lean": "d78275cf8d9227b484a33b0373e0d2872b328db3",
+    "Hardening/CycleNegative/BadChallenge.lean": "824b359c0aba15740dc8361151c19404831daa22",
+    "Hardening/CycleNegative/BadSolution.lean": "420503d3b738793919d0872f694e6e12206da017",
+    "Hardening/config.json": "d14d648634399866d68cff32ad5de2046dda31fa",
+    "Hardening/config-nanoda.json": "8bcbbb4234faa536affe002b41bc84e070cd616b",
+    "Hardening/config-negative1-tampered-challenge.json": "0998129559e8338f30fc1b79473930f221dc2918",
+    "Hardening/config-negative2-smuggled-axiom.json": "02259c3a22dfc8c3be95f84a6be4c850206f35b6",
+    "Hardening/config-cycle.json": "ff49afd87774e61bbb9c7b60288e656969f2ff04",
+    "Hardening/config-cycle-nanoda.json": "5a5199516ce9b667e63dce23eb1874fb2ec5e711",
+    "Hardening/config-cycle-negative-phase.json": "239adbe7dd494e65849ad9626124cbc9cbea0573",
+    "Hardening/config-cycle-negative-axiom.json": "d6c65cf36c3810fe9cc0931c9e4229c9c93e7356",
+    "scripts/audit_cycle_comparator.py": "18a335a73bcc303fd6728290a0b768b2e63f7ca0"
+  }
+}

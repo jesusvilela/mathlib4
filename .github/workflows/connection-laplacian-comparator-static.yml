@@ -1,0 +1,37 @@
+name: Connection Laplacian comparator static integrity (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - 'Hardening/config*.json'
+      - 'Hardening/*Challenge.lean'
+      - 'Hardening/*Solution.lean'
+      - 'Hardening/Negative/**'
+      - 'Hardening/CycleNegative/**'
+      - 'Porting/audit_comparator_port.py'
+      - 'Porting/comparator_source_hashes.json'
+      - 'scripts/audit_cycle_comparator.py'
+      - '.github/workflows/connection-laplacian-comparator-static.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  comparator-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate pinned comparator provenance and negative-control boundaries
+        run: python3 Porting/audit_comparator_port.py
+      - name: Validate cycle comparator statements and phase counterexample
+        run: python3 scripts/audit_cycle_comparator.py
+      - name: State epistemic boundary
+        run: echo "STATIC integrity only; no comparator, nanoda, or expected-failure replay executed."

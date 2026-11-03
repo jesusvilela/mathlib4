@@ -5,10 +5,13 @@ on:
     branches:
       - research/connection-laplacian-full-port
     paths:
-      - 'Hardening/**'
+      - 'Hardening/*.lean'
+      - 'Hardening/**/*.lean'
       - 'ConnectionLaplacian/**'
       - 'ConnectionLaplacian.lean'
-      - 'Porting/**'
+      - 'Porting/check_connection_spine.sh'
+      - 'Porting/check_hardening_positive.sh'
+      - 'Porting/audit_trust.py'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
