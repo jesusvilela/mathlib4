@@ -1,0 +1,104 @@
+name: Connection Laplacian native comparator compatibility probe (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - '.github/workflows/connection-laplacian-native-comparator-probe.yml'
+      - 'Hardening/CycleChallenge.lean'
+      - 'Hardening/CycleSolution.lean'
+      - 'Hardening/config-cycle.json'
+      - 'ConnectionLaplacian/**'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-connection-comparator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native-compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lean/Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+
+      - name: Install native sandbox prerequisite
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap
+          command -v bwrap
+          bwrap --version
+
+      - name: Record native comparator capability and provenance
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/comparator-probe"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "toolchain=$(cat lean-toolchain)"
+            uname -a
+            lean --version
+            lake --version
+            bwrap --version
+          } | tee "$RUNNER_TEMP/comparator-probe/versions.txt"
+          lake help comparator > "$RUNNER_TEMP/comparator-probe/help.txt"
+          grep -q 'bubblewrap' "$RUNNER_TEMP/comparator-probe/help.txt"
+          test -f lake-manifest.json
+          python3 Porting/audit_comparator_port.py
+
+      - name: Replay cycle challenge using native Lake comparator (Lean kernel only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          lake comparator --config=Hardening/config-cycle.json --json \
+            > "$RUNNER_TEMP/comparator-probe/cycle-positive.json" \
+            2> "$RUNNER_TEMP/comparator-probe/cycle-positive.stderr"
+          rc=$?
+          set -e
+          echo "native_comparator_exit_code=$rc" | tee -a "$RUNNER_TEMP/comparator-probe/versions.txt"
+          if [ "$rc" -ne 0 ]; then
+            echo "Native comparator compatibility probe did not pass (exit $rc)"
+            tail -n 80 "$RUNNER_TEMP/comparator-probe/cycle-positive.stderr" || true
+            tail -c 5000 "$RUNNER_TEMP/comparator-probe/cycle-positive.json" || true
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ["RUNNER_TEMP"]) / "comparator-probe" / "cycle-positive.json"
+          report = json.loads(path.read_text())
+          if not isinstance(report, dict):
+              raise SystemExit("Expected a JSON object from native comparator")
+          if report.get("sandboxed") is not True:
+              raise SystemExit("Comparator did not report active sandbox")
+          print("Native comparator returned exit 0 and sandboxed=true")
+          PY
+
+      - name: Archive compatibility probe evidence (including failures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: connection-native-comparator-probe
+          path: ${{ runner.temp }}/comparator-probe/
+          if-no-files-found: warn
+          retention-days: 90
