@@ -60,10 +60,7 @@ example :
   -- graph. Here the shared entry lemma removes the matrix coercion layer
   -- so the same finite-neighbor enumeration can discharge all nine entries.
   ext u v
-  refine (scalarLaplacian_entry G3 u v).trans ?_
-  -- Normalize degrees while the SimpleGraph expression is still folded:
-  -- the neighborFinset theorem rewrites to an executable finite filter.
-  simp only [SimpleGraph.degree, SimpleGraph.neighborFinset_eq_filter]
+  refine (scalarLaplacian_entry_filter G3 u v).trans ?_
   fin_cases u <;> fin_cases v <;>
     simp [G3, adj3, edge3s,
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
