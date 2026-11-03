@@ -31,11 +31,34 @@ Those pinned historical tools **must not be assumed compatible** with
 Lean 4.36.0-rc2. In particular the old exporter patch is not a supported
 4.36 migration by itself.
 
-Before constructing an expensive full replay, establish and record a
-4.36-compatible exporter and comparator revision and build both from
-recorded SHAs. Do not silently downgrade the Mathlib port or import the
-historical exporter patch as if it were current. A compatibility failure is
-a failure of the replay infrastructure, not of the mathematics.
+### Native comparator supersedes the historical portability plan
+
+**Correction (2026-11-03):** Comparator was merged into Lean's Lake tooling
+in **Lean 4.35**. The pinned Lean 4.36.0-rc2 source includes
+`lake comparator` and `lake check` with toolchain-matched `leanexport`,
+and a mandatory **Bubblewrap** sandbox unless explicitly disabled.
+Consequently, **do not port or build the 4.11-specific external exporter
+and comparator as the default migration route**. Use the native command
+directly:
+
+```bash
+lake comparator --config=Hardening/config-cycle.json --json
+```
+
+The first native compatibility probe, CI workflow
+`connection-laplacian-native-comparator-probe.yml`, is deliberately
+**Lean-kernel-only**. A successful probe is not yet independent nanoda
+evidence and does not discharge the four adversarial controls.
+This is a pending run, not a claim of success.
+
+Reference: Lean v4.36.0-rc2
+`src/lake/Lake/CLI/Help.lean` (`helpComparator`) and the
+Lean 4.35 release notes. The old standalone comparator README also
+declares its own deprecation in favor of the Lake commands.
+
+The historical exporter patch remains archived as provenance.
+A compatibility failure is a failure of the replay infrastructure,
+not a counterexample to the mathematics.
 
 ## Execution matrix
 
@@ -54,20 +77,26 @@ Do not accept generic nonzero status for any of the four negative cases.
 
 ## Isolation and external kernel criteria
 
-1. Run the real landlock sandbox on a host where enforcement is supported;
-   record OS/kernel version and `landrun` revision.
-2. Before trusting positive runs, execute a **separate forbidden read/write
-   probe** and preserve the denial transcript. A selected binary's presence,
-   or a `COMPARATOR_LANDRUN` variable, is not an enforcement test.
-3. Record the precise Lean, Mathlib, comparator, exporter, landrun and
-   nanoda versions and revisions; fail closed when any are missing.
-4. Check for actual `Lean default kernel accepts the solution`,
-   `nanoda kernel accepts the solution` and `Your solution is okay!`
-   markers separately in *each* positive replay log. Audit the exported
-   kernel input and its size.
-5. Archive all six comparator logs, the independent sandbox probe,
-   environment provenance, full tool SHAs and checksums as an Actions
-   artifact (including on failure). Exclude credentials and tokens.
+1. Run the native **Bubblewrap** sandbox on a compatible Linux host;
+   record OS/kernel, the installed `bwrap` version, Lean toolchain and
+   exact repository commit. Never pass `--inadvisably-no-sandbox`.
+2. Before promoting trust, test sandbox-denied filesystem access separately
+   and preserve its transcript; the native JSON report's
+   `sandboxed: true` indicates that sandbox mode was enabled, but it
+   does not substitute for an independently observed OS denial.
+3. Record the Lean/Mathlib commits and names of all external checker binaries;
+   the native exporter is the `leanexport` shipped with the same toolchain.
+4. Require native comparator JSON reports showing successful kernel judgments
+   in both positive runs. Require a separate, actually executed nanoda
+   judgment (for example, via the existing `enable_nanoda` configurations)
+   before claiming dual-kernel replay. Do not rely on legacy textual log
+   markers without checking the newer structured report schema.
+5. Archive all six JSON reports, diagnostics, independent sandbox probe,
+   environment provenance and checksums as CI artifacts, including on
+   failure. Keep credentials and tokens out of artifacts.
+6. For negative controls distinguish exit status **1** (rejection) from
+   **2** (unable to start), and inspect the structured report to reject
+   unrelated build, sandbox, export, timeout or resource failures.
 
 ## Promotion rule
 
