@@ -61,8 +61,11 @@ example :
   -- so the same finite-neighbor enumeration can discharge all nine entries.
   ext u v
   refine (scalarLaplacian_entry G3 u v).trans ?_
+  -- Normalize degrees while the SimpleGraph expression is still folded:
+  -- the neighborFinset theorem rewrites to an executable finite filter.
+  simp only [SimpleGraph.degree, SimpleGraph.neighborFinset_eq_filter]
   fin_cases u <;> fin_cases v <;>
-    simp [G3, adj3, edge3s, SimpleGraph.degree, SimpleGraph.neighborFinset,
+    simp [G3, adj3, edge3s,
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
       Matrix.head_cons, Matrix.vecHead, Matrix.vecTail]
   all_goals first | exact card_filter_univ_cast _ _ (by decide) | norm_num
