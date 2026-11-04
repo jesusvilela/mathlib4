@@ -1,0 +1,159 @@
+name: Connection Laplacian native comparator negative controls (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - '.github/workflows/connection-laplacian-native-negative-replay.yml'
+      - 'Hardening/config-negative*.json'
+      - 'Hardening/config-cycle-negative*.json'
+      - 'Hardening/Negative/**'
+      - 'Hardening/CycleNegative/**'
+      - 'Hardening/Challenge.lean'
+      - 'Hardening/Solution.lean'
+      - 'Hardening/CycleChallenge.lean'
+      - 'Hardening/CycleSolution.lean'
+      - 'ConnectionLaplacian/**'
+      - 'ConnectionLaplacian.lean'
+      - 'lakefile.lean'
+      - 'lake-manifest.json'
+      - 'lean-toolchain'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-comparator-negative-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  negative-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: graph-tampered-statement
+            config: Hardening/config-negative1-tampered-challenge.json
+            diagnostic: statement
+          - id: graph-smuggled-axiom
+            config: Hardening/config-negative2-smuggled-axiom.json
+            diagnostic: axiom
+          - id: cycle-tampered-phase
+            config: Hardening/config-cycle-negative-phase.json
+            diagnostic: statement
+          - id: cycle-smuggled-axiom
+            config: Hardening/config-cycle-negative-axiom.json
+            diagnostic: axiom
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lean and cached Mathlib
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+
+      - name: Establish trusted sandbox prerequisite
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap
+          sudo chown root:root /usr/bin/bwrap
+          sudo chmod 4755 /usr/bin/bwrap
+          test -u /usr/bin/bwrap
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- sh -c 'test -r /etc/hosts && printf child-ok' \
+            > "$RUNNER_TEMP/bwrap-positive.txt"
+          grep -qx child-ok "$RUNNER_TEMP/bwrap-positive.txt"
+          target="$RUNNER_TEMP/comparator-no-write-target"
+          printf 'original\n' > "$target"
+          set +e
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- sh -c 'printf modified > "$1"' sh "$target" \
+            > "$RUNNER_TEMP/bwrap-denial.stdout" 2> "$RUNNER_TEMP/bwrap-denial.stderr"
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          test "$(cat "$target")" = original
+          grep -iq 'read-only file system' "$RUNNER_TEMP/bwrap-denial.stderr"
+
+      - name: Check pinned comparator inputs before replay
+        run: |
+          set -euo pipefail
+          python3 Porting/audit_comparator_port.py
+          lake help comparator | grep -q 'bubblewrap'
+          test -f lake-manifest.json
+          mkdir -p "$RUNNER_TEMP/negative-replay"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "case=${{ matrix.id }}"
+            echo "config=${{ matrix.config }}"
+            lean --version
+            lake --version
+            bwrap --version
+            uname -a
+          } | tee "$RUNNER_TEMP/negative-replay/provenance.txt"
+
+      - name: Run isolated expected-rejection comparator
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/negative-replay"
+          set +e
+          lake comparator --config="${{ matrix.config }}" \
+            > "$dir/comparator.stdout" 2> "$dir/comparator.stderr"
+          rc=$?
+          set -e
+          printf 'exit_code=%s\n' "$rc" | tee -a "$dir/provenance.txt"
+          cat "$dir/comparator.stdout" "$dir/comparator.stderr" > "$dir/combined.log"
+          if [ "$rc" -ne 1 ]; then
+            echo "FAIL: expected comparator mathematical rejection with exit code 1; got $rc"
+            tail -n 90 "$dir/combined.log"
+            exit 1
+          fi
+          if grep -Eiq 'unknown target|unknown module prefix|build failed|Child exited|bwrap:|out of memory|timed out' "$dir/combined.log"; then
+            echo "FAIL: infrastructure or compilation failure, not valid negative control"
+            tail -n 90 "$dir/combined.log"
+            exit 1
+          fi
+          case "${{ matrix.diagnostic }}" in
+            statement)
+              grep -Fq 'Challenge and solution theorem statement do not match' "$dir/combined.log" || {
+                echo "FAIL: statement mismatch diagnostic absent"
+                tail -n 90 "$dir/combined.log"
+                exit 1
+              }
+              ;;
+            axiom)
+              grep -Fq 'Illegal axiom detected' "$dir/combined.log" || {
+                echo "FAIL: forbidden-axiom diagnostic absent"
+                tail -n 90 "$dir/combined.log"
+                exit 1
+              }
+              ;;
+            *) echo "Unknown expected diagnosis"; exit 1 ;;
+          esac
+          echo "PASS: comparator explicitly rejected ${{ matrix.id }} for the expected reason"
+
+      - name: Archive comparator and sandbox evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: negative-replay-${{ matrix.id }}
+          path: |
+            ${{ runner.temp }}/negative-replay/
+            ${{ runner.temp }}/bwrap-positive.txt
+            ${{ runner.temp }}/bwrap-denial.stderr
+            ${{ runner.temp }}/bwrap-denial.stdout
+          if-no-files-found: warn
+          retention-days: 90
