@@ -90,6 +90,15 @@ lean_lib Cache where
   -- the `requiresModuleSystem` package option set above.
   allowNonModules := true
 
+/-!
+Experimental comparator targets for the full connection-Laplacian research port.
+Kept outside the upstream Mathlib submission lane. Challenge files can contain
+intentional sorries and MUST NOT be part of the default build target.
+-/
+lean_lib Hardening where
+  globs := #[`Hardening.+]
+  allowNonModules := true
+
 lean_lib MathlibTest where
   globs := #[`MathlibTest.+]
   leanOptions := mathlibTestOptions
