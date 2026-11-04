@@ -91,6 +91,12 @@ jobs:
         shell: bash
         run: lake exe runLinter Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
 
+      - name: Validate Mathlib generated top-level import index
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake exe mk_all --check
+
       - name: Require all 19 declared theorem names and standard axioms
         shell: bash
         run: |
