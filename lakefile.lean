@@ -95,6 +95,10 @@ Experimental comparator targets for the full connection-Laplacian research port.
 Kept outside the upstream Mathlib submission lane. Challenge files can contain
 intentional sorries and MUST NOT be part of the default build target.
 -/
+lean_lib ConnectionLaplacian where
+  globs := #[`ConnectionLaplacian, `ConnectionLaplacian.+]
+  allowNonModules := true
+
 lean_lib Hardening where
   globs := #[`Hardening.+]
   allowNonModules := true
