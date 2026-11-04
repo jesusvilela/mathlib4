@@ -130,3 +130,37 @@ The next independent CI lane, `connection-laplacian-native-graph-comparator.yml`
 checks the seven general-graph statements using `Hardening/config.json`.
 Its first run is [41832221841](https://github.com/jesusvilela/mathlib4/actions/runs/41832221841);
 no verdict was available when this entry was written.
+
+## 2026-11-04: both native positive suites passed, negative controls queued
+
+The seven general-graph theorem targets also passed native
+`lake comparator --config=Hardening/config.json` on
+[Actions run 41832221841](https://github.com/jesusvilela/mathlib4/actions/runs/41832221841)
+at commit `dd425293629f3007bdb305f961a5eb2e405e1910`.
+The comparator exit status was 0; the separate Bubblewrap filesystem
+denial test passed. Together with the five cycle targets above, these
+are **12/12 positive target statements accepted**, across **two separate
+native Lean-kernel comparator runs**. Neither is yet an independently
+executed nanoda replay.
+
+The four adversarial controls are now configured in the isolated,
+non-default workflow
+`.github/workflows/connection-laplacian-native-negative-replay.yml`:
+two statement alterations (general graph and cycle phase), and two
+unauthorized-axiom attempts. Each has its own sandbox probe, native
+comparator invocation, diagnostic assertion, and retained CI artifact.
+
+A negative is accepted as a successful test only when the comparator
+returns status 1 and emits the **specific** expected diagnosis.
+Generic build errors, missing targets, resource failures, and sandbox
+failures do not count. The native Lake 4.36 comparison and axiom code
+provides the expected strings
+`Challenge and solution theorem statement do not match` and
+`Illegal axiom detected`. These controls are **not verified** until
+the new matrix finishes successfully.
+
+The first corrected matrix run is
+[41841390650](https://github.com/jesusvilela/mathlib4/actions/runs/41841390650).
+The upstream submission branch is unchanged. Do not equate the
+current native Lean-kernel positives with historical dual-kernel
+acceptance or external mathematical review.
