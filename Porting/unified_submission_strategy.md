@@ -330,3 +330,86 @@ It documents only the submitted signed-graph API and carefully separates
 research evidence and the full connection-Laplacian development.
 **This draft is not an opened PR.** An upstream PR is blocked pending
 the current-upstream gate and any forum/maintainer direction on split size.
+
+## 2026-11-04 final verification closure and source-fidelity check
+
+This dated update supersedes earlier **pending** CI language above, without
+erasing the chronology of earlier failures and repairs.
+
+### Frozen verification targets
+
+- **Clean proposed Mathlib PR**: `submission/signed-laplacian-unified-current`
+  at `e282abc5b8e42e93ab6f28322ba0871e6ed82022`, based directly on
+  upstream Mathlib `a84939a26903163e1b98ee002bc94e9563e75c12`.
+  The comparison is **0 behind, 2 ahead, 2 files changed**:
+  `Mathlib.lean` and
+  `Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean`.
+  The signed-graph module is exactly blob
+  `70af2c839ff1e1274035de4d89a2385cf2cc7d3e` (360 lines).
+- **Upstream-current 19-theorem direct replay**:
+  [CI 41879159967](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967)
+  passed the exact module's build, lint, `mk_all --check`, 19 source-selected
+  public theorem exports, transitive axiom allowlist
+  (`propext`, `Quot.sound`, `Classical.choice`), Bubblewrap sandbox
+  checks and acceptance diagnostics from **Lean paranoid, lean4lean, nanoda,
+  con-leche, con-ron, and Lean default**.
+- **Research-to-Mathlib matrix identity, independently replayed**:
+  [CI 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925)
+  passed at research commit `cd3bf65f57d84267e069aed6ebfac29e5a8355e1`.
+  The imported 4,388-job Lean build succeeded. The actual theorem
+  `ConnGraph.signedLaplacianMobius_eq_signedLapMatrix` in
+  `Porting/MathlibBridge.lean` compiled, an attempted sandbox host write
+  was denied, and its exported statement/proof was accepted by **all six**
+  named kernels. The bridge source blob was
+  `f6a4492d2f1eefed719afcf6a059ceae0d73a282`.
+  Two compiler messages concern *unused simp arguments*, not unproved
+  goals or failed checking. This bridge is **research-only**; do not
+  move it into the proposed upstream diff without separate review.
+- **Research comparator and reference**: the 7+5 research targets were
+  accepted by the configured paranoid checker
+  ([41859926384](https://github.com/jesusvilela/mathlib4/actions/runs/41859926384));
+  four isolated negative controls rejected for intended reasons in the
+  current native replay
+  ([41859850561](https://github.com/jesusvilela/mathlib4/actions/runs/41859850561)).
+  The original cycle-axiom historical fixture previously failed for
+  **statement mismatch**, not illicit axiom; the new native-only fixture
+  specifically verified the illicit-axiom diagnostic. The independent
+  exact-rational oracle passed all 761 signed simple graph assignments
+  on 0–4 labeled vertices
+  ([41864971253](https://github.com/jesusvilela/mathlib4/actions/runs/41864971253)).
+  Finite models are not a universal formal proof.
+
+### Focused legacy source check: orientation double-cover vertex carrier
+
+At the pinned source
+[`connection_laplacian_lean@0b4ad40.../ConnectionLaplacian/L5_Cover.lean`](https://github.com/jesusvilela/connection_laplacian_lean/blob/0b4ad40a7dd26d924bd44096eaa5291c3882a67b/ConnectionLaplacian/L5_Cover.lean#L48),
+the line is `def CoverV : Type _ := G.V × Bool`.
+At the ported
+[`ConnectionLaplacian/L5_Cover.lean`](https://github.com/jesusvilela/mathlib4/blob/research/connection-laplacian-full-port/ConnectionLaplacian/L5_Cover.lean#L48),
+it is `abbrev CoverV : Type _ := G.V × Bool`.
+**The carrier expression and type are textually identical**, while Lean's
+reducibility/elaboration behavior can differ. This does not by itself
+establish full definitionally elaborated equivalence across toolchains.
+Other proof-tactic and Mathlib API adaptations in the file must remain
+separate from mathematical-statement changes.
+
+### Remaining boundaries / release decision
+
+- **Still open, full research program**: independent elaborated-type and
+  definition-body correspondence for the original 189 theorem/lemma headers
+  and 56 declaration headers, especially across toolchain/API adaptations.
+  Do not promote textual alignment to this stronger claim.
+- **Still open, upstream contribution**: human mathematical and Mathlib
+  maintainer review of naming, generality, location, statement usefulness
+  and AI-assistance disclosure. The checker implementations are multiple
+  but not probabilistically independent proof discoveries.
+- **Decision**: keep a **single two-file upstream PR** as the favored
+  proposal, with foundation and extension branches preserved solely as
+  requested split fallbacks. No upstream PR has been opened and no
+  submitted mathematical source has been altered by this documentation
+  checkpoint.
+
+For a shorter mathematical explanation suitable for a busy reviewer, read
+[`signed_laplacian_human_review.md`](./signed_laplacian_human_review.md).
+The frozen PR text is in
+[`mathlib_signed_laplacian_pr_draft.md`](./mathlib_signed_laplacian_pr_draft.md).
