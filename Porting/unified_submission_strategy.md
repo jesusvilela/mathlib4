@@ -152,3 +152,40 @@ candidate, not independently rewritten, to maintain a clear source map.
 
 No upstream PR was opened, no mathematical statement was altered by this
 self-audit, and the one-PR/split-on-maintainer-request intention is intact.
+
+## 2026-11-04 follow-on: exact finite-graph independent oracle
+
+The direct source-to-source matrix theorem was submitted for compilation
+in `Porting/MathlibBridge.lean` (commit `968ff57`) and a dedicated Lean CI
+run [41863952437](https://github.com/jesusvilela/mathlib4/actions/runs/41863952437)
+was queued at last inspection. This is still **H**, not a compiled proof.
+
+An additional independent, standard-library-only Python reference implementation
+was committed at `Porting/signed_bridge_oracle.py` (commit `125f70e`),
+with its own fork-only CI workflow committed at `5d0933a`.
+It exhaustively enumerates `1+1+3+27+729 = 761` labeled simple signed-graph
+states on 0..4 vertices. Checks include a research-style off-diagonal
+matrix against separately assembled signed `D-A`, exact-rational nullity
+versus balanced-component count, quadratic energy and edgewise zero-energy
+conditions for `{-1,0,1}^n`, all `2^n` vertex switching assignments,
+cyclic vertex relabeling, and two analytic triangle spectra
+`{0,3,3}` (all-positive) and `{1,1,4}` (one-negative).
+
+A locally executed, equivalent prototype passed all 761 cases. The
+**exact committed script has not yet acquired its GitHub CI verdict**
+([run 41864971253](https://github.com/jesusvilela/mathlib4/actions/runs/41864971253),
+queued at last inspection). Do not claim this is independent Lean kernel
+acceptance: the oracle tests a separately programmed mathematical model,
+not the executable Lean definitions.
+
+A separate research-spine CI regression (previous unknown module prefix
+`Mathlib`) is being addressed by building imports via Lake rather than
+raw `lake env lean`, committed at `0d504ad`. Runs
+[41863994087](https://github.com/jesusvilela/mathlib4/actions/runs/41863994087)
+and [41863994070](https://github.com/jesusvilela/mathlib4/actions/runs/41863994070)
+were queued. The clean upstream submission branch is unchanged.
+
+**Preregistered promotion rule:** Only a completed Lean bridge compile on
+the same source blob plus a passing exact reference run promotes
+source-to-Mathlib operator correspondence. Neither alone suffices to
+establish complete independent verification of the historical development.
