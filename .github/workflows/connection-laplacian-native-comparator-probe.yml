@@ -11,7 +11,7 @@ on:
       - 'Hardening/config-cycle.json'
       - 'ConnectionLaplacian/**'
       - 'lean-toolchain'
-      - 'lakefile.toml'
+      - 'lakefile.lean'
       - 'lake-manifest.json'
   workflow_dispatch:
 
