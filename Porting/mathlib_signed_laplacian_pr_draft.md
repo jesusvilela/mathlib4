@@ -1,3 +1,14 @@
+> **ARCHIVAL INTERNAL MODEL-WRITTEN DRAFT — DO NOT COPY INTO A MATHLIB PR.**
+> The community's [2026 AI contribution guidelines](https://mathlib.org/contribute/index.html#use-of-ai)
+> prohibit using an LLM to write GitHub and Zulip comments, require an
+> accurate disclosure of AI tools and their role, and require the human
+> contributor to understand and independently justify all AI-written
+> material. This draft is usable for **private fact-checking only**.
+> The eventual public PR description must be written by the human author
+> in their own words after reviewing
+> [the human ownership gate](./mathlib_author_ownership_gate.md).
+> Machine CI being green does not establish that gate.
+>
 # Proposed single Mathlib PR — draft, not submitted
 
 **Suggested title:** `feat(Combinatorics/SimpleGraph): define signed graph Laplacians and their energy`
@@ -79,7 +90,7 @@ All of these checks concern proof correctness under the encoded
 statements. They do not substitute for maintainers' independent
 review of naming, mathematical generality, style and utility.
 
-**AI-assistance disclosure (for review before submission):** AI tools assisted with proof-porting, checking, and CI preparation. The source and named theorem exports have been checked with the pinned Lean/Mathlib build and configured proof checkers; these checks do not establish mathematical originality or upstream suitability. The submitting author remains responsible for the statements and contribution.
+**AI provenance note (internal; not to paste):** An AI assistant generated or substantially modified Lean code and proof tactics, portability changes, CI configurations, test harnesses and explanatory text during this collaboration. These are not merely autocomplete edits. The author needs to determine the provenance of any further external AI tools used, independently understand every proposed declaration, obtain subject-expert supervision where required, and describe the specifics without assistance in the eventual public PR. Per Mathlib's policy, substantial LLM-generated code must be labeled `LLM-generated`.
 
 ## Maintainer guidance welcome
 
@@ -98,7 +109,7 @@ available and can be split without changing the resulting theorems.
   two files, no proof harness included (compared to `a84939a` on 4 November 2026).
 - [x] The five linked CI runs were checked as successful and their stated
   targets distinguished; the current-upstream run checks source blob `70af2c83`.
-- [ ] Author to review the PR wording and AI-assistance disclosure before public submission; proof checkers cannot verify mathematical intention.
+- [ ] Human author to independently write the entire public PR description in their own words; no model-authored GitHub/Zulip comments.\n- [ ] Human ownership gate completed and Lean subject-expert supervision documented as appropriate; proof checkers cannot verify human mathematical understanding.\n- [ ] Accurate, detailed AI-generation provenance and `LLM-generated` label prepared for the real PR.
 - [x] Exact source-to-research operator bridge accepted by all six named
   checker modes ([run 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925)); this remains research-only and outside the PR diff.
 - [x] Added a [human mathematical orientation note](./signed_laplacian_human_review.md)
