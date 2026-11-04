@@ -55,7 +55,7 @@ theorem signedLaplacianMobius_eq_signedLapMatrix (G : ConnGraph) :
           wrapEdgeLabeling, e, huv, hadj, hw]
     · simp [signedLaplacianMobius, SimpleGraph.signedLapMatrix,
         SimpleGraph.signedAdjMatrix, SimpleGraph.degMatrix,
-        SimpleGraph.degree, wrapEdgeLabeling, huv, hadj]
+        wrapEdgeLabeling, huv, hadj]
 
 end ConnGraph
 end ConnectionLaplacian
