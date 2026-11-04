@@ -298,3 +298,35 @@ Promotion rule: if the upstream-current experiment passes, designate the
 matching two-file, same-source-blob clean branch as the one proposed PR.
 Keep the original foundation, extension, research and verification
 branches as provenance and optional maintainer-requested split material.
+
+## Upstream-aligned clean submission candidate (4 November 2026)
+
+A non-destructive upstream-base transplant now exists at
+`submission/signed-laplacian-unified-current` (head `e282abc5b8e42e93ab6f28322ba0871e6ed82022`),
+created directly from `leanprover-community/mathlib4:master@a84939a26903163e1b98ee002bc94e9563e75c12`.
+The resulting comparison to that exact upstream base is **0 commits behind,
+2 commits ahead, and only two changed files**:
+
+1. `Mathlib.lean`: a single sorted `public import`;
+2. `Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean`: identical
+   blob `70af2c839ff1e1274035de4d89a2385cf2cc7d3e` (360 lines).
+
+No CI workflows or historical research files belong to that clean diff.
+The previous `submission/signed-laplacian-unified` branch is preserved
+unchanged as history/fallback, along with the foundation/extension splits.
+Only one upstream PR is intended.
+
+The same upstream base and mathematical source were transplanted to
+`verification/signed-laplacian-upstream-current`, with a **verification-only**
+workflow that checks compilation, Mathlib linting, `mk_all --check`,
+strict 19-declaration transitive axiom allowlisting, and direct replay by
+the six paranoid checker configurations. The corrected full gate is
+[CI run 41879159967](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967),
+queued when this entry was added.
+
+A reviewable single-PR draft lives in
+[`Porting/mathlib_signed_laplacian_pr_draft.md`](./mathlib_signed_laplacian_pr_draft.md).
+It documents only the submitted signed-graph API and carefully separates
+research evidence and the full connection-Laplacian development.
+**This draft is not an opened PR.** An upstream PR is blocked pending
+the current-upstream gate and any forum/maintainer direction on split size.
