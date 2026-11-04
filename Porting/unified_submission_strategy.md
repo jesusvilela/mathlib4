@@ -83,3 +83,72 @@ candidate, not independently rewritten, to maintain a clear source map.
   newly configured, no verified completion yet.
 - Source-to-semantics theorem map: needs independent elaborated-type and
   definition-body comparison before comprehensive verification can be claimed.
+
+## 2026-11-04 critical self-audit (supersedes earlier pending-status language)
+
+- The clean upstream candidate is `submission/signed-laplacian-unified@ed66c4bc`.
+  Its diff against the fork's `master` consists of two files:
+  `Mathlib.lean` (+1 import) and `SignedLapMatrix.lean` (+360 lines).
+  It does **not** contain the full original connection-Laplacian library.
+  It diverges from the fork's master (behind by one master commit);
+  the fork itself was at 2026-11-02 while upstream Mathlib master had
+  advanced to 2026-11-04. An upstream rebase and exact-head rerun are
+  required before a real Mathlib PR.
+- **Fresh verification success**:
+  [41859739815](https://github.com/jesusvilela/mathlib4/actions/runs/41859739815)
+  on `66910992` compiled and linted the unified signed module, performed
+  its separate leanchecker pass, and printed the transitive axioms of
+  **19 named theorems**. All 19 printed only
+  `propext`, `Classical.choice`, and `Quot.sound`.
+  The clean candidate's next commit `ed66c4bc` removed only the CI file,
+  leaving mathematical source content unchanged. Nevertheless, a passing
+  run on one SHA must not be misrepresented as a run on a different SHA.
+- **CI checker bug found and corrected**: The old axiom gate only searched
+  for `sorryAx`, `native_decide` and `Lean.ofReduceBool`, leaving arbitrary
+  unauthorized axiom names undetected by its script (despite clean observed
+  output). Furthermore the preserved verification branch carried a CI
+  workflow triggered by the submission branch, not itself. Commit
+  `f98a45f3` on `verification/signed-laplacian-unified` corrects the
+  trigger and enforces an exact 19-name allowlist audit permitting only
+  the three standard axioms. Its new run
+  [41861086119](https://github.com/jesusvilela/mathlib4/actions/runs/41861086119)
+  was in progress during this audit. This fix remains **off** the clean
+  upstream candidate.
+- **Research spine regression**:
+  [41859825052](https://github.com/jesusvilela/mathlib4/actions/runs/41859825052)
+  failed during `ConnectionLaplacian.Basic` compilation with
+  `unknown module prefix 'Mathlib'`; the other modules were skipped.
+  This is a missing dependency/cache/build-setup failure in that CI
+  execution, *not* a theorem counterexample. Previously successful spine
+  runs remain historical evidence but do not prove that the present research
+  HEAD has been freshly rebuilt under that failing workflow.
+- **Do not conflate target sets**: 12 accepted native comparator challenge
+  statements in the research graph/cycle modules are **different targets**
+  from the 19 theorem declarations in the proposed Mathlib signed module.
+  The checker validates proof/statement agreement, not source-to-intended-
+  mathematics interpretation.
+- **Unproved formal bridge**: The original `ConnGraph` uses a predicate
+  `G.wrap : G.graph.edgeSet → Prop`; the upstream signed module uses
+  `EdgeLabeling Bool`. The candidate compatibility statement is
+
+  ```lean
+  -- Research-branch theorem target; not claimed to be compiled.
+  G.graph.signedLapMatrix (fun e => decide (G.wrap e))
+    = G.signedLaplacianMobius
+  ```
+
+  This requires checking the exact elaboration of the edge-labeling
+  coercion and the diagonal/off-diagonal definitions. It is not present
+  as a proved theorem in the reviewed submission module. A direct bridge
+  (plus small analytic sign/convention controls) would supply a better
+  source-to-formal-target witness than relying on verbal similarity.
+- **Not yet green** at audit time: the revised negative-control matrix
+  [41859850561](https://github.com/jesusvilela/mathlib4/actions/runs/41859850561)
+  and native `--paranoid` independent checker matrix
+  [41859926384](https://github.com/jesusvilela/mathlib4/actions/runs/41859926384).
+  The earlier cycle-local-axiom control failed for a *statement mismatch*
+  rather than the specified axiom diagnostic; this remains recorded as a
+  failed control, even though the comparator did reject it.
+
+No upstream PR was opened, no mathematical statement was altered by this
+self-audit, and the one-PR/split-on-maintainer-request intention is intact.
