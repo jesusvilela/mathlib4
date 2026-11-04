@@ -1,7 +1,8 @@
 # Connection Laplacian — full Lean migration lane
 
 This branch is an **experimental full-port workspace**, separate from the
-small [verified first signed-Laplacian PR candidate](https://github.com/jesusvilela/mathlib4/tree/submission/signed-lap-foundation).
+[clean, upstream-aligned unified signed-Laplacian PR candidate](https://github.com/jesusvilela/mathlib4/tree/submission/signed-laplacian-unified-current).
+The earlier foundation-only candidate is retained as an optional maintainer-requested split.
 
 Source: [jesusvilela/connection_laplacian_lean](https://github.com/jesusvilela/connection_laplacian_lean)
 at commit `0b4ad40a7dd26d924bd44096eaa5291c3882a67b`.
@@ -25,10 +26,10 @@ Mathlib standards on the newer toolchain.
    modernize imports, adapt APIs, audit statement correspondence, compile and
    independently verify the positive proof spine. Run negative hardening
    fixtures *as expected-failure tests*, not as ordinary modules.
-2. **Upstream Mathlib:** submit small reusable modules with stable public APIs.
-   The small foundation-only candidate is staged at `submission/signed-lap-foundation`
-   and has [successful CI](https://github.com/jesusvilela/mathlib4/actions/runs/41448667166).
-   The fuller signed-Laplacian proof module remains separate.
+2. **Upstream Mathlib:** propose a small reusable 360-line module with 19
+   public theorems from `submission/signed-laplacian-unified-current` plus one
+   import, preserving `submission/signed-lap-foundation` as a fallback.
+   The clean proposal passed [upstream-base verification](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967).
    No upstream pull request is open.
 
 ## Verification gates
@@ -42,8 +43,8 @@ Mathlib standards on the newer toolchain.
 | `ConnectionLaplacian.L5_Cover` and `L6_Cohomology` compile | **Passed** after modern graph-relation, cover type and decidability upgrades; [CI](https://github.com/jesusvilela/mathlib4/actions/runs/41458728611) |
 | Complete original theorem spine compiles | **Passed:** all 17 modules and the root/audit files on the newer toolchain; [CI run 41474652642](https://github.com/jesusvilela/mathlib4/actions/runs/41474652642) |
 | Statement-by-statement mathematical correspondence | **Textual audit complete:** 189 theorem/lemma headers match the pinned source after the documented `finrank` spelling normalization; 56 definition/structure headers have one API adaptation (`CoverV`: `def` → `abbrev`). Elaborated-type and definitional-equivalence checks remain open. |
-| Transitive axiom and independent checker audit | **Transitive axiom audit passed:** 25/25 declarations, only `Classical.choice`, `Quot.sound`, `propext`; additional independent rechecking pending |
-| Hardening battery and negative-test isolation | **Positive Lean suite PASSED:** all ten selected modules, all four shards (74 total graph cases) and the independent 74-case monolith; [CI run 41593486656](https://github.com/jesusvilela/mathlib4/actions/runs/41593486656). Intentionally failing negative controls remain isolated; independent comparator replay remains open. |
+| Transitive axiom and independent checker audit | **Research spine:** 25/25 selected declarations with standard axioms. **Proposed Mathlib module:** all 19 public declarations passed the exact standard-axiom allowlist and six checker modes [on upstream-current CI](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967). The separate research bridge passed [its own six-checker replay](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925). |
+| Hardening battery and negative-test isolation | **Positive Lean suite:** ten modules, 74 graph cases plus monolith [41863994070](https://github.com/jesusvilela/mathlib4/actions/runs/41863994070). **Research comparator:** 7 graph + 5 cycle positives with paranoid checks [41859926384](https://github.com/jesusvilela/mathlib4/actions/runs/41859926384); four expected-rejection controls [41859850561](https://github.com/jesusvilela/mathlib4/actions/runs/41859850561). An earlier source-pinned cycle-axiom fixture rejected for statement mismatch; a separate native-only replacement demonstrated explicit illegal-axiom rejection. |
 | Community review and upstream acceptance | **Pending** |
 
 The [dependency-aware compilation script](check_connection_spine.sh) now
@@ -56,8 +57,10 @@ a textual audit matched 189 theorem/lemma headers; independent elaborated-type c
 The standalone [positive hardening probe](check_hardening_positive.sh) now
 separately tests solution aliases and bounded convention examples. Legacy
 challenge files intentionally contain `sorry` and MUST NOT be promoted as
-proved results merely because they elaborate. New-toolchain comparator,
-nanoda, and negative-control replay remains an independent gate.
+proved results merely because they elaborate. The newer-toolchain comparator, paranoid-checker and negative-control
+replays were later executed successfully in dedicated jobs; see the
+verification table above. Those checks are distinct from this positive
+fixture compilation.
 Preserve the original names and statements unless each change is
 mathematically justified and documented. Do not erase the historically
 corrected general-graph balance invariant: total negative-edge parity is
@@ -88,8 +91,16 @@ preserved byte-for-byte; see `comparator_source_hashes.json` and
 checks provenance, coverage, positive/negative configuration and absence
 of untrusted imports into the production Lean spine.
 
-**That workflow is static.** It does not build or run comparator, nanoda,
-lean4export, or sandboxed dual-kernel checks. The historical toolchain-specific
-replay remains a separate open gate: two positive suites (seven graph targets,
-five cycle targets) plus four expected rejections, with independent kernel
-and sandbox evidence. Never call a static configuration check a comparator replay.
+**That workflow is static.** It does not itself build or run comparator,
+nanoda, lean4export, or sandboxed independent-kernel checks. Separate later
+workflows established the seven-graph/five-cycle positive replay
+([41859926384](https://github.com/jesusvilela/mathlib4/actions/runs/41859926384))
+and four negative controls
+([41859850561](https://github.com/jesusvilela/mathlib4/actions/runs/41859850561)).
+The research-to-Mathlib matrix identity was also checked by all six named
+checker modes [in run 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925).
+The source-pinned *historical* cycle-axiom control initially rejected for
+statement mismatch; the new native-only fixture explicitly tests illicit
+axioms. Do not equate either negative test with universal adversarial
+assurance. Full 189-theorem source-versus-port elaborated-type equivalence
+and the `CoverV` def/abbrev reducibility audit remain open.
