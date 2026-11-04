@@ -413,3 +413,55 @@ For a shorter mathematical explanation suitable for a busy reviewer, read
 [`signed_laplacian_human_review.md`](./signed_laplacian_human_review.md).
 The frozen PR text is in
 [`mathlib_signed_laplacian_pr_draft.md`](./mathlib_signed_laplacian_pr_draft.md).
+
+## 2026-11-04: final contributor-ownership gate after independent verification
+
+**All recorded mechanical gates have passed at their pinned revisions**:
+
+- Original-to-Mathlib matrix theorem accepted by the six paranoid
+  checker configurations: [bridge CI 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925),
+  research commit `cd3bf65`, bridge blob `f6a4492d2f1eefed719afcf6a059ceae0d73a282`,
+  signed source blob `70af2c839ff1e1274035de4d89a2385cf2cc7d3e`.
+- Same unchanged 19-theorem module tested on the then-current
+  `leanprover-community/mathlib4:master@a84939a`:
+  [CI 41879159967](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967),
+  successful build, linter, `mk_all --check`, exact three-standard-axiom
+  allowlist, direct export, six checker acceptances.
+- Clean one-PR candidate
+  `submission/signed-laplacian-unified-current@e282abc5` has
+  **exactly two upstream diff files**, 0 commits behind the recorded
+  upstream commit. The old foundation and follow-on branches remain.
+
+**Newly verified external constraint (not a kernel condition):**
+[Mathlib contribution guidelines, “Use of AI”](https://mathlib.org/contribute/index.html#use-of-ai)
+say that AI-generated code must be understood and justified by the
+human contributor without AI, that significant LLM-generated code
+must be transparently disclosed and labeled `LLM-generated`,
+and that using an LLM to **write GitHub or Zulip comments is not allowed**.
+The project also warns against low-quality, unsupervised AI contributions.
+Successful formal verification does **not** establish human understanding
+or expert oversight. A direct upstream PR by the agent would currently
+risk conflicting with these project-specific expectations.
+
+Therefore this repository now retains an internal
+[`mathlib_author_ownership_gate.md`](./mathlib_author_ownership_gate.md),
+covering mathematical reconstruction, Lean API decisions and truthful
+provenance. The previously generated PR body
+[`mathlib_signed_laplacian_pr_draft.md`](./mathlib_signed_laplacian_pr_draft.md)
+has been relabeled **internal model-written analysis only, not to copy
+or post**. The author must personally write the real PR description and
+review replies in their own words. The exact code branch is preserved;
+no upstream PR is being opened by this workflow.
+
+**API overlap search:** GitHub's available code/issue searches for
+`signedLapMatrix`, `signless Laplacian`, `signed adjacency`, and
+`EdgeLabeling Bool` returned no hits on upstream's default branch
+at this check. That absence is **not** a novelty finding (code
+search can miss relevant mathematics under different names). An
+external review of API generality and maintainability remains open.
+
+**Final handoff condition:** the release gate now has two parts:
+(1) frozen, reproducible formal checks — satisfied on recorded commits;
+(2) genuine human understanding, supervision as necessary, independent
+public writing and maintainer review — **not established** by these CI
+runs. Do not conflate them or skip the second because of the first.
