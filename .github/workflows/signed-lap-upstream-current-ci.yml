@@ -1,0 +1,217 @@
+name: Signed Laplacian upstream-current compatibility and independent-kernel replay
+
+on:
+  push:
+    branches:
+      - verification/signed-laplacian-upstream-current
+    paths:
+      - '.github/workflows/signed-lap-upstream-current-ci.yml'
+      - 'Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean'
+      - 'Mathlib.lean'
+      - 'lean-toolchain'
+      - 'lakefile.lean'
+      - 'lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: signed-lap-unified-paranoid-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independent-kernels:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      MATHLIB_CACHE_GET_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pinned Lean and prebuilt Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          nanoda: false
+          use-mathlib-cache: true
+          use-github-cache: false
+
+      - name: Install and test sandbox
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap
+          sudo chown root:root /usr/bin/bwrap
+          sudo chmod 4755 /usr/bin/bwrap
+          test -u /usr/bin/bwrap
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- bash -c 'printf sandbox-ready' \
+            > "$RUNNER_TEMP/signed-lap-sandbox-positive"
+          grep -qx 'sandbox-ready' "$RUNNER_TEMP/signed-lap-sandbox-positive"
+          printf 'original\n' > "$RUNNER_TEMP/signed-lap-sandbox-denial-target"
+          set +e
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- bash -c 'printf tampered > "$1"' bash "$RUNNER_TEMP/signed-lap-sandbox-denial-target" \
+            > "$RUNNER_TEMP/signed-lap-sandbox-denial.stdout" \
+            2> "$RUNNER_TEMP/signed-lap-sandbox-denial.stderr"
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          test "$(cat "$RUNNER_TEMP/signed-lap-sandbox-denial-target")" = original
+          grep -iq 'read-only file system' "$RUNNER_TEMP/signed-lap-sandbox-denial.stderr"
+
+      - name: Build frozen signed Laplacian library
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/signed-lap-paranoid"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "source_blob=$(git hash-object Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean)"
+            echo "toolchain=$(cat lean-toolchain)"
+            lean --version
+            lake --version
+            bwrap --version
+          } | tee "$RUNNER_TEMP/signed-lap-paranoid/provenance.txt"
+          lake build Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix \
+            > "$RUNNER_TEMP/signed-lap-paranoid/build.log" 2>&1 || {
+              tail -n 100 "$RUNNER_TEMP/signed-lap-paranoid/build.log"
+              exit 1
+            }
+          lake help check | grep -q -- '--paranoid'
+
+      - name: Lint the signed-Laplacian module on current Mathlib
+        shell: bash
+        run: lake exe runLinter Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
+
+      - name: Require all 19 declared theorem names and standard axioms
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/SignedLapUnifiedAxiomAudit.lean <<'EOF'
+          import Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix
+          #print axioms SimpleGraph.signedAdjMatrix_apply
+          #print axioms SimpleGraph.signedAdjMatrix_apply_of_adj
+          #print axioms SimpleGraph.signedAdjMatrix_apply_self
+          #print axioms SimpleGraph.signedLapMatrix_apply_self
+          #print axioms SimpleGraph.isSymm_signedAdjMatrix
+          #print axioms SimpleGraph.isSymm_signedLapMatrix
+          #print axioms SimpleGraph.isHermitian_signedLapMatrix
+          #print axioms SimpleGraph.signedAdjMatrix_const_false
+          #print axioms SimpleGraph.signedLapMatrix_const_false
+          #print axioms SimpleGraph.signedAdjMatrix_const_true
+          #print axioms SimpleGraph.signedLapMatrix_const_true
+          #print axioms SimpleGraph.signlessLapMatrix_toLinearMap₂'
+          #print axioms SimpleGraph.posSemidef_signlessLapMatrix
+          #print axioms SimpleGraph.posSemidef_signedLapMatrix_const_true
+          #print axioms SimpleGraph.signedAdjMatrix_sq_apply_of_adj
+          #print axioms SimpleGraph.signedLapMatrix_toLinearMap₂'
+          #print axioms SimpleGraph.posSemidef_signedLapMatrix
+          #print axioms SimpleGraph.signedLapMatrix_toLinearMap₂'_eq_zero_iff_forall_adj
+          #print axioms SimpleGraph.signedLapMatrix_mulVec_eq_zero_iff_forall_adj
+          EOF
+          lake env lean /tmp/SignedLapUnifiedAxiomAudit.lean > /tmp/signed-lap-unified-axioms.txt
+          cat /tmp/signed-lap-unified-axioms.txt
+          # Reject every nonstandard axiom, not just a few known bypasses.
+          # Compare the full reported theorem set with the command list.
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          src = Path('/tmp/SignedLapUnifiedAxiomAudit.lean').read_text()
+          out = Path('/tmp/signed-lap-unified-axioms.txt').read_text()
+          expected = re.findall(r'^\s*#print axioms\s+(\S+)', src, flags=re.M)
+          assert len(expected) == 19 and len(set(expected)) == 19, (
+              "Unexpected number or duplicate theorem names in audit input", expected
+          )
+          reports = {}
+          with_axioms = re.compile(
+              r"^'([^\n]+)' depends on axioms: \[(.*?)\]", flags=re.M | re.S
+          )
+          without_axioms = re.compile(
+              r"^'([^\n]+)' does not depend on any axioms", flags=re.M
+          )
+          for match in with_axioms.finditer(out):
+              name, body = match.groups()
+              assert name not in reports, f"Duplicate theorem report: {name}"
+              reports[name] = set(x.strip() for x in body.split(',') if x.strip())
+          for match in without_axioms.finditer(out):
+              name = match.group(1)
+              assert name not in reports, f"Duplicate theorem report: {name}"
+              reports[name] = set()
+          assert set(reports) == set(expected), (
+              f"Missing or unexpected theorem reports: {set(expected) ^ set(reports)}"
+          )
+          allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+          bad = {name: sorted(axioms - allowed)
+                 for name, axioms in reports.items() if axioms - allowed}
+          assert not bad, f"Nonstandard axioms in transitive dependencies: {bad}"
+          print(f"PASS: {len(reports)} expected theorem reports and only permitted axioms")
+          PY
+      - name: Select all 19 theorems by declaration, not by handwritten list
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          src = Path("Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean").read_text()
+          names = re.findall(r"(?m)^theorem\s+([^\s(:]+)", src)
+          assert len(names) == 19 and len(set(names)) == 19, names
+          assert "posSemidef_signedLapMatrix" in names, names
+          assert "signedLapMatrix_mulVec_eq_zero_iff_forall_adj" in names, names
+          target = Path(__import__("os").environ["RUNNER_TEMP"]) / "signed-lap-paranoid" / "theorem-names.txt"
+          target.write_text("".join(f"SimpleGraph.{name}\n" for name in names))
+          print(f"PASS: exactly {len(names)} source-declared public theorems selected")
+          PY
+
+      - name: Export those exact declarations in a read-only sandbox
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/signed-lap-paranoid"
+          mapfile -t decls < "$dir/theorem-names.txt"
+          test "${#decls[@]}" -eq 19
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- bash -c 'module="$1"; shift; exec lake env leanexport "$module" -- "$@"' bash \
+            Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix "${decls[@]}" \
+            > "$dir/signed-lap-19.ndjson" \
+            2> "$dir/export.stderr"
+          test -s "$dir/signed-lap-19.ndjson"
+          wc -c "$dir/signed-lap-19.ndjson" | tee -a "$dir/provenance.txt"
+
+      - name: Require all independent kernels to accept the targeted export
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/signed-lap-paranoid"
+          lake check --paranoid --from-export="$dir/signed-lap-19.ndjson" \
+            2>&1 | tee "$dir/check.log"
+          for checker in 'Lean paranoid' lean4lean nanoda con-leche con-ron 'Lean default'; do
+            grep -Fq "$checker kernel accepts the solution" "$dir/check.log" || {
+              echo "FAIL: missing actual acceptance diagnostic for $checker"
+              tail -n 100 "$dir/check.log"
+              exit 1
+            }
+          done
+          echo 'PASS: 19 source-selected signed-Laplacian theorems replayed by all six named kernels' \
+            | tee -a "$dir/check.log"
+
+      - name: Archive provenance and checker logs (including failure)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-laplacian-19-paranoid-checker-evidence
+          path: |
+            ${{ runner.temp }}/signed-lap-paranoid/
+            ${{ runner.temp }}/signed-lap-sandbox-positive
+            ${{ runner.temp }}/signed-lap-sandbox-denial.stderr
+          if-no-files-found: warn
+          retention-days: 90
