@@ -1,0 +1,143 @@
+name: Connection Laplacian paranoid external-kernel comparator (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - '.github/workflows/connection-laplacian-paranoid-comparator.yml'
+      - 'Hardening/Challenge.lean'
+      - 'Hardening/Solution.lean'
+      - 'Hardening/config.json'
+      - 'ConnectionLaplacian/**'
+      - 'lean-toolchain'
+      - 'lakefile.lean'
+      - 'lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-paranoid-comparator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native-compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: general-graph
+            config: Hardening/config.json
+          - id: cycle-spectrum
+            config: Hardening/config-cycle.json
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lean/Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+
+      - name: Install native sandbox prerequisite
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap
+          command -v bwrap
+          bwrap --version
+          # GitHub-hosted Ubuntu forbids unprivileged uid maps. Use the
+          # Bubblewrap-supported setuid-root installation mode on this
+          # ephemeral job only. Do not disable the sandbox or AppArmor.
+          sudo chown root:root /usr/bin/bwrap
+          sudo chmod 4755 /usr/bin/bwrap
+          test -u /usr/bin/bwrap
+          stat -c '%a %U:%G %n' /usr/bin/bwrap
+
+      - name: Record native comparator capability and provenance
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/paranoid-comparator-probe"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "toolchain=$(cat lean-toolchain)"
+            uname -a
+            lean --version
+            lake --version
+            bwrap --version
+          } | tee "$RUNNER_TEMP/paranoid-comparator-probe/versions.txt"
+          lake help comparator > "$RUNNER_TEMP/paranoid-comparator-probe/help.txt"
+          grep -q 'bubblewrap' "$RUNNER_TEMP/paranoid-comparator-probe/help.txt"
+          test -f lake-manifest.json
+          python3 Porting/audit_comparator_port.py
+
+      - name: Prove sandbox read-only isolation before invoking comparator
+        shell: bash
+        run: |
+          set -euo pipefail
+          # First prove bwrap can launch a child, not just fail during startup.
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- sh -c 'printf sandbox-ready' \
+            > "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-positive.stdout" \
+            2> "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-positive.stderr"
+          grep -qx 'sandbox-ready' "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-positive.stdout"
+          target="$RUNNER_TEMP/paranoid-comparator-probe/sandbox-denial-target"
+          printf 'original\n' > "$target"
+          set +e
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- sh -c 'printf "tampered\\n" > "$1"' sh "$target" \
+            > "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-test.stdout" \
+            2> "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-test.stderr"
+          rc=$?
+          set -e
+          echo "sandbox_write_probe_exit=$rc" | tee -a "$RUNNER_TEMP/paranoid-comparator-probe/versions.txt"
+          if [ "$rc" -eq 0 ] || [ "$(cat "$target")" != "original" ]; then
+            echo "FAIL: sandbox did not prevent writes to host filesystem"
+            exit 1
+          fi
+          # Require a filesystem denial from the child shell, not a generic
+          # Bubblewrap startup error or a failed namespace setup.
+          grep -iq 'read-only file system' \
+            "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-test.stderr" || {
+              cat "$RUNNER_TEMP/paranoid-comparator-probe/sandbox-test.stderr"
+              exit 1
+            }
+          echo 'PASS: a running Bubblewrap sandbox denied host write' \
+            | tee -a "$RUNNER_TEMP/paranoid-comparator-probe/versions.txt"
+
+      - name: Replay all bundled independent kernels for the configured comparator targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          lake comparator --config="${{ matrix.config }}" --paranoid \
+            > "$RUNNER_TEMP/paranoid-comparator-probe/paranoid-positive.stdout" \
+            2> "$RUNNER_TEMP/paranoid-comparator-probe/paranoid-positive.stderr"
+          rc=$?
+          set -e
+          echo "native_comparator_exit_code=$rc" | tee -a "$RUNNER_TEMP/paranoid-comparator-probe/versions.txt"
+          if [ "$rc" -ne 0 ]; then
+            echo "Native paranoid comparator did not accept the selected targets (exit $rc)"
+            tail -n 100 "$RUNNER_TEMP/paranoid-comparator-probe/paranoid-positive.stderr" || true
+            tail -n 100 "$RUNNER_TEMP/paranoid-comparator-probe/paranoid-positive.stdout" || true
+            exit 1
+          fi
+          echo "PASS: native comparator --paranoid exited 0 after independent sandbox denial test"
+
+      - name: Archive compatibility probe evidence (including failures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: connection-paranoid-${{ matrix.id }}
+          path: ${{ runner.temp }}/paranoid-comparator-probe/
+          if-no-files-found: warn
+          retention-days: 90
