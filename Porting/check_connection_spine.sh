@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Probe all independent migrated modules, skipping only those whose imports failed.
-# This preserves strict failure semantics while revealing several API failures per CI run.
+# Probe all migrated modules via Lake, letting Lake construct imported Mathlib
+# .oleans. A bare `lake env lean` cannot build missing import dependencies.
+# Preserve strict failure semantics and the dependency-aware result table.
 set -euo pipefail
 
 mkdir -p .lake/build/lib/lean/ConnectionLaplacian
@@ -63,7 +64,7 @@ for name in "${modules[@]}"; do
     continue
   fi
   echo "::group::Compile ConnectionLaplacian.$name"
-  if lake env lean -o ".lake/build/lib/lean/ConnectionLaplacian/${name}.olean" "ConnectionLaplacian/${name}.lean"; then
+  if lake build "ConnectionLaplacian.${name}"; then
     outcome[$name]=PASS
     echo "PASS: ConnectionLaplacian.$name"
   else
@@ -83,7 +84,7 @@ if (( ${#failed[@]} || ${#skipped[@]} )); then
   exit 1
 fi
 
-lake env lean -o .lake/build/lib/lean/ConnectionLaplacian.olean ConnectionLaplacian.lean
+lake build ConnectionLaplacian
 # All printed axioms are checked against a complete source-derived allowlist.
 lake env lean ConnectionLaplacian/AxiomAudit.lean | tee /tmp/connection-laplacian-axiom-audit.log
 python3 Porting/audit_trust.py --root . --axiom-output /tmp/connection-laplacian-axiom-audit.log
