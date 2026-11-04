@@ -1,0 +1,41 @@
+name: Connection Laplacian independent finite-graph oracle (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - '.github/workflows/connection-laplacian-independent-oracle.yml'
+      - 'Porting/signed_bridge_oracle.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-oracle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute complete exact reference matrix, gauge and kernel checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/signed-bridge-oracle"
+          echo "commit=$(git rev-parse HEAD)" | tee "$RUNNER_TEMP/signed-bridge-oracle/provenance.txt"
+          python3 --version | tee -a "$RUNNER_TEMP/signed-bridge-oracle/provenance.txt"
+          python3 -B Porting/signed_bridge_oracle.py \
+            | tee "$RUNNER_TEMP/signed-bridge-oracle/result.txt"
+          grep -q '^PASS 761 complete ternary graphs' \
+            "$RUNNER_TEMP/signed-bridge-oracle/result.txt"
+          grep -q '^SCOPE: independent finite-graph reference, not a Lean theorem replay' \
+            "$RUNNER_TEMP/signed-bridge-oracle/result.txt"
+      - name: Archive source-matched oracle result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-graph-independent-oracle
+          path: ${{ runner.temp }}/signed-bridge-oracle/
+          if-no-files-found: warn
+          retention-days: 90
