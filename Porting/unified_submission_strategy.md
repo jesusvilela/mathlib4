@@ -200,3 +200,47 @@ establish complete independent verification of the historical development.
 - **Upstream status**: the clean `submission/signed-laplacian-unified` branch and split fallback branches remain unchanged; no upstream PR was opened. The full 19-name allowlisted-axiom CI previously passed on the separate verification branch. Nothing in this ledger extends the 12 research targets to an independent five-kernel replay of all 19 Mathlib public theorem declarations.
 
 **Decision boundary**: continue to block the comprehensive-verification claim until the exact research-to-Mathlib matrix theorem compiles and is itself checked. Review upstream toolchain drift separately before opening a single Mathlib PR.
+
+## 2026-11-04 direct six-checker replay on the unified Mathlib candidate
+
+The research `lake comparator --paranoid` positives covered seven
+general-graph and five cycle-spectrum *research* statements; they do
+not directly replay the distinct 19 declarations of the Mathlib
+`SignedLapMatrix` submission module.
+
+To close that cross-target verification gap, a separate fork-only
+workflow was committed on `verification/signed-laplacian-unified`
+at `f67c046`:
+
+`.github/workflows/signed-lap-unified-paranoid-ci.yml`
+
+It selects the 19 public Lean theorem declarations directly from
+`Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean`, asserts exactly
+19 unique names, builds that module, performs an actual Bubblewrap
+isolation/host-write-denial test, generates a declaration-selected
+NDJSON `leanexport` in a read-only/no-network sandbox, and invokes
+`lake check --paranoid --from-export=...` against exactly that export.
+
+The workflow requires explicit successful diagnostics from six kernels:
+`Lean paranoid`, `lean4lean`, `nanoda`, `con-leche`,
+`con-ron`, and `Lean default`. It archives the SHA, source-blob hash,
+selection list and logs. Its first run is
+[41872683913](https://github.com/jesusvilela/mathlib4/actions/runs/41872683913),
+in progress when this note was written.
+
+**Do not promote** to direct external-kernel verification of the Mathlib
+candidate unless that *exact run*, or a later frozen replacement,
+finishes all export and checker steps successfully. The corresponding
+Mathlib source blob remains
+`70af2c839ff1e1274035de4d89a2385cf2cc7d3e`
+on the research, clean submission and verification branches.
+
+The earlier research bridge run
+[41863952437](https://github.com/jesusvilela/mathlib4/actions/runs/41863952437)
+failed because `simp` recursively unfolded
+`SimpleGraph.degree` against `card_neighborFinset_eq_degree`.
+Two later research commits `d4cdf14` and `cb1c26e` removed that
+unfolding without changing the theorem statement. The corrected
+[bridge run 41870656627](https://github.com/jesusvilela/mathlib4/actions/runs/41870656627)
+remains pending verification. The unchanged source-to-semantics
+equality must not be called proved until the actual CI check succeeds.
