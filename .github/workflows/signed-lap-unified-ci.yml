@@ -3,7 +3,7 @@ name: Signed Laplacian unified contribution verification
 on:
   push:
     branches:
-      - submission/signed-laplacian-unified
+      - verification/signed-laplacian-unified
     paths:
       - 'Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean'
       - 'Mathlib.lean'
@@ -64,12 +64,42 @@ jobs:
           EOF
           lake env lean /tmp/SignedLapUnifiedAxiomAudit.lean > /tmp/signed-lap-unified-axioms.txt
           cat /tmp/signed-lap-unified-axioms.txt
-          # Lean's exit status ensures every printed theorem declaration exists.
-          if grep -Eiq 'sorryAx|native_decide|Lean.ofReduceBool' /tmp/signed-lap-unified-axioms.txt; then
-            echo 'FAIL: nonstandard axiom in theorem dependencies'
-            exit 1
-          fi
-          echo 'PASS: all named declarations elaborated and no untrusted axioms were found'
+          # Reject every nonstandard axiom, not just a few known bypasses.
+          # Compare the full reported theorem set with the command list.
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          src = Path('/tmp/SignedLapUnifiedAxiomAudit.lean').read_text()
+          out = Path('/tmp/signed-lap-unified-axioms.txt').read_text()
+          expected = re.findall(r'^\s*#print axioms\s+(\S+)', src, flags=re.M)
+          assert len(expected) == 19 and len(set(expected)) == 19, (
+              "Unexpected number or duplicate theorem names in audit input", expected
+          )
+          reports = {}
+          with_axioms = re.compile(
+              r"^'([^\n]+)' depends on axioms: \[(.*?)\]", flags=re.M | re.S
+          )
+          without_axioms = re.compile(
+              r"^'([^\n]+)' does not depend on any axioms", flags=re.M
+          )
+          for match in with_axioms.finditer(out):
+              name, body = match.groups()
+              assert name not in reports, f"Duplicate theorem report: {name}"
+              reports[name] = set(x.strip() for x in body.split(',') if x.strip())
+          for match in without_axioms.finditer(out):
+              name = match.group(1)
+              assert name not in reports, f"Duplicate theorem report: {name}"
+              reports[name] = set()
+          assert set(reports) == set(expected), (
+              f"Missing or unexpected theorem reports: {set(expected) ^ set(reports)}"
+          )
+          allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+          bad = {name: sorted(axioms - allowed)
+                 for name, axioms in reports.items() if axioms - allowed}
+          assert not bad, f"Nonstandard axioms in transitive dependencies: {bad}"
+          print(f"PASS: {len(reports)} expected theorem reports and only permitted axioms")
+          PY
       - name: Record source provenance
         run: |
           echo "commit=$(git rev-parse HEAD)"
