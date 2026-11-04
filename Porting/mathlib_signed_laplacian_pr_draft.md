@@ -69,12 +69,13 @@ library blob, `70af2c839ff1e1274035de4d89a2385cf2cc7d3e`,
 on Mathlib's 2026-11-04 upstream base `a84939a`.
 Its fresh compile/lint/import-index/axiom/six-kernel workflow is
 [upstream compatibility CI](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967).
-**That last result was pending when this draft was written.**
-Do not call it passed until the exact CI run finishes successfully.
+**Result verified on 4 November 2026: passed.** The run completed successfully at `fe1d33c00c2ff739c9f0c5b55c181d9826fc776c`, checking the unchanged 19-theorem source against upstream `a84939a26903163e1b98ee002bc94e9563e75c12`. The job reports successful compilation, linting, `mk_all --check`, the exact standard-axiom allowlist, a source-selected 19-declaration export, and acceptance by all six configured checker modes (Lean paranoid, lean4lean, nanoda, con-leche, con-ron, Lean default).
 
 All of these checks concern proof correctness under the encoded
 statements. They do not substitute for maintainers' independent
 review of naming, mathematical generality, style and utility.
+
+**AI-assistance disclosure (for review before submission):** AI tools assisted with proof-porting, checking, and CI preparation. The source and named theorem exports have been checked with the pinned Lean/Mathlib build and configured proof checkers; these checks do not establish mathematical originality or upstream suitability. The submitting author remains responsible for the statements and contribution.
 
 ## Maintainer guidance welcome
 
@@ -87,12 +88,11 @@ available and can be split without changing the resulting theorems.
 
 ### Author's pre-submission gate (not part of PR body)
 
-- [ ] Current-upstream test completed successfully with strict 19-name
-  axiom allowlist, `mk_all --check`, and six paranoid checker modes.
-- [ ] The clean upstream-base submission branch's diff remains exactly
-  two files, no proof harness included.
-- [ ] All external evidence links verified and reviewed for their actual
-  theorem target and source commit.
-- [ ] Review wording and AI-assistance attribution for transparency
-  without claiming that checkers verify mathematical intention.
-- [ ] One PR only; do not open a foundation PR unless maintainers ask.
+- [x] Current-upstream test completed successfully with strict 19-name
+  axiom allowlist, `mk_all --check`, and six checker modes ([run 41879159967](https://github.com/jesusvilela/mathlib4/actions/runs/41879159967)).
+- [x] The clean upstream-base submission branch's diff remains exactly
+  two files, no proof harness included (compared to `a84939a` on 4 November 2026).
+- [x] The five linked CI runs were checked as successful and their stated
+  targets distinguished; the current-upstream run checks source blob `70af2c83`.
+- [ ] Author to review the PR wording and AI-assistance disclosure before public submission; proof checkers cannot verify mathematical intention.
+- [x] One PR only; do not open a foundation PR unless maintainers ask. No upstream PR has been opened.
