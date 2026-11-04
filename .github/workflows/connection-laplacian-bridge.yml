@@ -25,7 +25,7 @@ concurrency:
 jobs:
   source-correspondence:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       MATHLIB_CACHE_GET_URL: ''
     steps:
@@ -75,6 +75,67 @@ jobs:
           grep -q 'signedLaplacianMobius_eq_signedLapMatrix' Porting/MathlibBridge.lean
           echo 'PASS: Lean accepted a total, all-finite-graph matrix equality' \
             | tee -a "$RUNNER_TEMP/mathlib-bridge/bridge.log"
+
+      - name: Verify actual filesystem denial before external checking
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap
+          sudo chown root:root /usr/bin/bwrap
+          sudo chmod 4755 /usr/bin/bwrap
+          test -u /usr/bin/bwrap
+          f="$RUNNER_TEMP/mathlib-bridge/host-denial"
+          printf 'original\n' > "$f"
+          set +e
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- bash -c 'printf altered > "$1"' bash "$f" \
+            > "$RUNNER_TEMP/mathlib-bridge/sandbox.stdout" \
+            2> "$RUNNER_TEMP/mathlib-bridge/sandbox.stderr"
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          test "$(cat "$f")" = original
+          grep -iq 'read-only file system' "$RUNNER_TEMP/mathlib-bridge/sandbox.stderr"
+
+      - name: Export the proved equality with its transitive dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/mathlib-bridge"
+          mkdir -p .lake/build/lib/lean/Porting
+          lake env lean -o .lake/build/lib/lean/Porting/MathlibBridge.olean \
+            Porting/MathlibBridge.lean 2>&1 | tee "$dir/compile-module.log"
+          printf '%s\n' 'ConnectionLaplacian.ConnGraph.signedLaplacianMobius_eq_signedLapMatrix' \
+            > "$dir/selected-declaration.txt"
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- bash -c 'exec lake env leanexport "$1" -- "$2"' bash \
+            Porting.MathlibBridge \
+            ConnectionLaplacian.ConnGraph.signedLaplacianMobius_eq_signedLapMatrix \
+            > "$dir/bridge-theorem.ndjson" \
+            2> "$dir/export.stderr"
+          test -s "$dir/bridge-theorem.ndjson"
+          {
+            echo "bridge_source_blob=$(git hash-object Porting/MathlibBridge.lean)"
+            echo "signed_mathlib_blob=$(git hash-object Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean)"
+            wc -c "$dir/bridge-theorem.ndjson"
+          } | tee -a "$dir/versions.txt"
+
+      - name: Require all bundled independent kernels to accept the exact bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/mathlib-bridge"
+          lake check --paranoid --from-export="$dir/bridge-theorem.ndjson" \
+            2>&1 | tee "$dir/check.log"
+          for checker in 'Lean paranoid' lean4lean nanoda con-leche con-ron 'Lean default'; do
+            grep -Fq "$checker kernel accepts the solution" "$dir/check.log" || {
+              echo "FAIL: missing acceptance from $checker on exact bridge"
+              exit 1
+            }
+          done
+          echo 'PASS: all six checkers accepted the original-to-Mathlib matrix equality' \
+            | tee -a "$dir/check.log"
 
       - name: Archive evidence even on failure
         if: always()
