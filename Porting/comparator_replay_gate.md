@@ -107,3 +107,26 @@ same recorded commit, with confirmed nanoda execution and independently
 demonstrated OS sandbox enforcement**. Keep this research gate separate from
 `submission/signed-lap-foundation` and do not open an upstream PR on the
 strength of this plan alone.
+
+## 2026-11-04: first native comparison passed
+
+At commit `8fae542bba0b6b47d5f948cd98bd4e371ec83f3c`,
+[Actions run 41825483527](https://github.com/jesusvilela/mathlib4/actions/runs/41825483527)
+completed successfully. The workflow ran the standard native
+`lake comparator --config=Hardening/config-cycle.json` with exit status **0**
+against the five cycle-spectrum challenge/solution targets, using the
+migrated Lean 4.36.0-rc2 toolchain. Before invoking the comparator, it
+executed a real Bubblewrap child and verified read-only host-file
+isolation via a denied write. Its environment and logs are preserved in
+the run's uploaded artifact.
+
+**Promotion:** Native Lean-kernel challenge/solution comparison of five
+cycle-spectrum targets is now verified on this migrated fork. This result
+is **not** nanoda/dual-kernel acceptance, four negative rejection replays,
+or independent source-to-mathematics validation. The challenge's graph-level
+cycle-transfer theorem still has explicit matrix-reindexing hypotheses.
+
+The next independent CI lane, `connection-laplacian-native-graph-comparator.yml`,
+checks the seven general-graph statements using `Hardening/config.json`.
+Its first run is [41832221841](https://github.com/jesusvilela/mathlib4/actions/runs/41832221841);
+no verdict was available when this entry was written.
