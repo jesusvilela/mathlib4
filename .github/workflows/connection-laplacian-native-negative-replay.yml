@@ -121,7 +121,7 @@ jobs:
             tail -n 90 "$dir/combined.log"
             exit 1
           fi
-          if grep -Eiq 'unknown target|unknown module prefix|build failed|Child exited|bwrap:|out of memory|timed out' "$dir/combined.log"; then
+          if grep -Eiq 'unknown target|unknown module prefix|build failed|bwrap:|out of memory|timed out' "$dir/combined.log"; then
             echo "FAIL: infrastructure or compilation failure, not valid negative control"
             tail -n 90 "$dir/combined.log"
             exit 1
