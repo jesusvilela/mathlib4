@@ -5,9 +5,10 @@
 **Provisional PR head:** `jesusvilela:submission/signed-laplacian-unified-current`
 **Target:** `leanprover-community/mathlib4:master`
 
-The following body is prepared for human review and should be copied only
-after the current-upstream compatibility gate is green. The older foundation
-and follow-on branches remain optional split points if maintainers request them.
+The current-upstream compatibility gate is now green. This is a **review-ready
+draft, not an authorized or submitted PR**; the author still needs to read
+and approve its text, including the AI-assistance disclosure. The older
+foundation and follow-on branches remain fallback split points.
 
 ---
 
@@ -60,6 +61,9 @@ and verification branches.
   operator with the original Möbius-sector signed Laplacian for the
   corresponding Boolean edge signs:
   [bridge proof CI](https://github.com/jesusvilela/mathlib4/actions/runs/41870656627).
+  The exact theorem was subsequently exported and accepted by six configured
+  independent checker modes with verified sandbox denial:
+  [direct bridge replay 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925).
 - Exact finite-graph controls cover all 761 signed graphs with up to
   four labeled vertices, including gauge transformations and kernel
   tests: [reference CI](https://github.com/jesusvilela/mathlib4/actions/runs/41864971253).
@@ -95,4 +99,8 @@ available and can be split without changing the resulting theorems.
 - [x] The five linked CI runs were checked as successful and their stated
   targets distinguished; the current-upstream run checks source blob `70af2c83`.
 - [ ] Author to review the PR wording and AI-assistance disclosure before public submission; proof checkers cannot verify mathematical intention.
+- [x] Exact source-to-research operator bridge accepted by all six named
+  checker modes ([run 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925)); this remains research-only and outside the PR diff.
+- [x] Added a [human mathematical orientation note](./signed_laplacian_human_review.md)
+  separating the 19 public API theorems from the historical research.
 - [x] One PR only; do not open a foundation PR unless maintainers ask. No upstream PR has been opened.
