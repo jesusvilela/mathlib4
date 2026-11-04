@@ -1,0 +1,86 @@
+name: Connection Laplacian to Mathlib signed-operator bridge (fork only)
+
+on:
+  push:
+    branches:
+      - research/connection-laplacian-full-port
+    paths:
+      - '.github/workflows/connection-laplacian-bridge.yml'
+      - 'Porting/MathlibBridge.lean'
+      - 'ConnectionLaplacian/Basic.lean'
+      - 'ConnectionLaplacian/KernelDimension.lean'
+      - 'Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean'
+      - 'lean-toolchain'
+      - 'lakefile.lean'
+      - 'lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: connection-laplacian-bridge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-correspondence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      MATHLIB_CACHE_GET_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lean and Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          mk_all-check: false
+          leanchecker: false
+          use-mathlib-cache: true
+          use-github-cache: false
+
+      - name: Record versions and fail on an admitted bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/mathlib-bridge"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "toolchain=$(cat lean-toolchain)"
+            lean --version
+            lake --version
+          } | tee "$RUNNER_TEMP/mathlib-bridge/versions.txt"
+          if grep -En '(^|[^[:alnum:]_])(sorry|admit|axiom)([^[:alnum:]_]|$)' Porting/MathlibBridge.lean; then
+            echo "FAIL: bridge cannot contain an admitted proof or a local axiom"
+            exit 1
+          fi
+
+      - name: Build all actual imported modules through Lake
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build Mathlib.Combinatorics.SimpleGraph.SignedLapMatrix ConnectionLaplacian.KernelDimension \
+            2>&1 | tee "$RUNNER_TEMP/mathlib-bridge/import-build.log"
+
+      - name: Elaborate and kernel-check the exact matrix identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake env lean Porting/MathlibBridge.lean \
+            2>&1 | tee "$RUNNER_TEMP/mathlib-bridge/bridge.log"
+          grep -q 'signedLaplacianMobius_eq_signedLapMatrix' Porting/MathlibBridge.lean
+          echo 'PASS: Lean accepted a total, all-finite-graph matrix equality' \
+            | tee -a "$RUNNER_TEMP/mathlib-bridge/bridge.log"
+
+      - name: Archive evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathlib-operator-bridge
+          path: ${{ runner.temp }}/mathlib-bridge/
+          if-no-files-found: warn
+          retention-days: 90
