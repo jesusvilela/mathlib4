@@ -244,3 +244,57 @@ unfolding without changing the theorem statement. The corrected
 [bridge run 41870656627](https://github.com/jesusvilela/mathlib4/actions/runs/41870656627)
 remains pending verification. The unchanged source-to-semantics
 equality must not be called proved until the actual CI check succeeds.
+
+## 2026-11-04: comprehensive technical verification checkpoint
+
+The previously pending gates finished with definitive CI results:
+
+| Claim | Evidence | Exact SHA under test | Current confidence |
+| --- | --- | --- | --- |
+| The original Möbius-sector operator equals Mathlib's signed Laplacian for Boolean wrap labels, on every `ConnGraph` admitted by the definitions | [bridge run 41870656627](https://github.com/jesusvilela/mathlib4/actions/runs/41870656627) | `cb1c26e813265c2784f53a84d74c7919632669d4` | **P**: Lean elaborated and kernel-checked the theorem without local axioms or sorries |
+| The 19 submitted signed-Laplacian theorem declarations have valid exports accepted by six Lean 4.36 checker configurations, including nanoda | [verification run 41872683913](https://github.com/jesusvilela/mathlib4/actions/runs/41872683913) | `f67c04612ca1b8d0315271fbf79817444824854a`, source blob `70af2c839ff1e1274035de4d89a2385cf2cc7d3e` | **M/P scoped**: actual exported proofs verified; does not itself establish semantic intent |
+| The full 19-file original formalization and axiom audit compile after the Lake dependency repair | [spine run 41863994087](https://github.com/jesusvilela/mathlib4/actions/runs/41863994087) | `0d504adf4559eabe611a759436e2ab32c2e934fe` | **P scoped** to compiled declarations and audit |
+| Selected positive historical hardening fixtures compile on the new toolchain | [hardening run 41863994070](https://github.com/jesusvilela/mathlib4/actions/runs/41863994070) | `0d504adf4559eabe611a759436e2ab32c2e934fe` | **M**: test compilation; not an independent mathematical proof |
+| The four distinct adversarial controls reject for the specified reasons | [negative run 41859850561](https://github.com/jesusvilela/mathlib4/actions/runs/41859850561) | `aa3faa2510bb` | **M**: four expected rejections, including corrected cycle-axiom fixture |
+| Seven graph and five cycle challenge targets pass Lean's built-in paranoid comparison | [paranoid run 41859926384](https://github.com/jesusvilela/mathlib4/actions/runs/41859926384) | `1455cc20116d` | **P/M**: scoped proof exports accepted under comparator assumptions |
+| Exact finite-graph reference equations, spectral anchors, gauge and relabeling relations | [oracle run 41864971253](https://github.com/jesusvilela/mathlib4/actions/runs/41864971253) | `5d0933a79f76479c332288efb32f010328df84ab` | **M**: 761 states, n ≤ 4; no assertion about larger sampled graphs |
+
+The exact `SignedLapMatrix.lean` blob is shared by the clean submission,
+research and verification branches; the latest direct six-checker run
+confirmed that precise file hash. The research bridge theorem is separately
+verified; it does **not** need to be copied into upstream Mathlib.
+
+**Correction to earlier statements:** The 19 source files of the research
+spine are not the same as the 19 public theorem declarations in the Mathlib
+signed-Laplacian module. They have different verification targets and must
+not be counted interchangeably. The four negative controls validate
+specific comparator defenses, not every possible adversarial attempt.
+The checker executables are distinct but their errors need not be
+probabilistically independent.
+
+### Remaining release conditions
+
+- The direct bridge is presently compiled by Lean's normal kernel.
+  Its new `--paranoid` external-kernel replay is in
+  [run 41878884925](https://github.com/jesusvilela/mathlib4/actions/runs/41878884925),
+  pending at the time of writing.
+- The original fork's `master` trailed upstream Mathlib `master` by
+  48 commits on 2026-11-04. Using the *then-current* upstream SHA
+  `a84939a26903163e1b98ee002bc94e9563e75c12`, an isolated branch
+  `verification/signed-laplacian-upstream-current` transplanted the
+  **unchanged** 360-line library blob and its one import, and added
+  fork-only validation. Its compile/lint/axiom/six-kernel test is
+  [run 41879018804](https://github.com/jesusvilela/mathlib4/actions/runs/41879018804),
+  queued at the time of this record. The clean submission branch has
+  not yet been rebased or overwritten.
+- Human maintainer review (API naming, generality, location, and utility)
+  remains an external judgment; no number of checking implementations
+  can substitute for mathematical exposition and human review.
+- Do not open an upstream PR containing `Hardening`, `Porting`, or
+  verification workflows. The intended upstream changes remain exactly
+  `Mathlib.lean` and `Mathlib/Combinatorics/SimpleGraph/SignedLapMatrix.lean`.
+
+Promotion rule: if the upstream-current experiment passes, designate the
+matching two-file, same-source-blob clean branch as the one proposed PR.
+Keep the original foundation, extension, research and verification
+branches as provenance and optional maintainer-requested split material.
