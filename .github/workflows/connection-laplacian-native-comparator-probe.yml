@@ -76,6 +76,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # First prove bwrap can launch a child, not just fail during startup.
+          bwrap --ro-bind / / --dev-bind /dev /dev --proc /proc --unshare-net \
+            -- sh -c 'printf sandbox-ready' \
+            > "$RUNNER_TEMP/comparator-probe/sandbox-positive.stdout" \
+            2> "$RUNNER_TEMP/comparator-probe/sandbox-positive.stderr"
+          grep -qx 'sandbox-ready' "$RUNNER_TEMP/comparator-probe/sandbox-positive.stdout"
           target="$RUNNER_TEMP/comparator-probe/sandbox-denial-target"
           printf 'original\n' > "$target"
           set +e
@@ -90,13 +96,9 @@ jobs:
             echo "FAIL: sandbox did not prevent writes to host filesystem"
             exit 1
           fi
-          # A namespace/bootstrap failure is not a successful sandbox denial.
-          grep -Eiq 'read-only file system|permission denied' \
-            "$RUNNER_TEMP/comparator-probe/sandbox-test.stderr" || {
-              cat "$RUNNER_TEMP/comparator-probe/sandbox-test.stderr"
-              exit 1
-            }
-          grep -q 'cannot create\|read-only\|Permission denied' \
+          # Require a filesystem denial from the child shell, not a generic
+          # Bubblewrap startup error or a failed namespace setup.
+          grep -iq 'read-only file system' \
             "$RUNNER_TEMP/comparator-probe/sandbox-test.stderr" || {
               cat "$RUNNER_TEMP/comparator-probe/sandbox-test.stderr"
               exit 1
