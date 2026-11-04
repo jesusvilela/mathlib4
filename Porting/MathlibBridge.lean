@@ -40,18 +40,18 @@ theorem signedLaplacianMobius_eq_signedLapMatrix (G : ConnGraph) :
   · subst v
     simp [signedLaplacianMobius, SimpleGraph.signedLapMatrix,
       SimpleGraph.signedAdjMatrix, SimpleGraph.degMatrix,
-      SimpleGraph.degree, wrapEdgeLabeling]
+      wrapEdgeLabeling]
   · by_cases hadj : G.graph.Adj u v
     · let e : G.graph.edgeSet :=
         ⟨s(u, v), (SimpleGraph.mem_edgeSet G.graph).mpr hadj⟩
       by_cases hw : G.wrap e
       · simp [signedLaplacianMobius, SimpleGraph.signedLapMatrix,
           SimpleGraph.signedAdjMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.degree, SimpleGraph.EdgeLabeling.get,
+          SimpleGraph.EdgeLabeling.get,
           wrapEdgeLabeling, e, huv, hadj, hw]
       · simp [signedLaplacianMobius, SimpleGraph.signedLapMatrix,
           SimpleGraph.signedAdjMatrix, SimpleGraph.degMatrix,
-          SimpleGraph.degree, SimpleGraph.EdgeLabeling.get,
+          SimpleGraph.EdgeLabeling.get,
           wrapEdgeLabeling, e, huv, hadj, hw]
     · simp [signedLaplacianMobius, SimpleGraph.signedLapMatrix,
         SimpleGraph.signedAdjMatrix, SimpleGraph.degMatrix,
