@@ -46,7 +46,7 @@ jobs:
             config: Hardening/config-cycle-negative-phase.json
             diagnostic: statement
           - id: cycle-smuggled-axiom
-            config: Hardening/config-cycle-negative-axiom.json
+            config: Hardening/config-cycle-negative-axiom-native.json
             diagnostic: axiom
     steps:
       - uses: actions/checkout@v4
